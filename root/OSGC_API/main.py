@@ -19,6 +19,7 @@ from functions.tiff_func import create_blank_tiff
 from functions.tiff_func import df_to_tiff
 from functions.tiff_func import get_resolution
 from functions.calculate_shape import calculate_shape
+from functions.shrink_array import nearest_neighbor
 
 
 matplotlib.use('Agg')
@@ -33,6 +34,11 @@ volume_directory = "/data"
 def process_coordinates():
     # Get the JSON data from the POST request
     data = request.json
+
+    # Get the X-Y Slices
+    num_x_slice = data.get("num_x_slice")
+    num_y_slice = data.get("num_y_slice")
+
 
     # Get the untouched data
     upper_lat = float(data.get('upper_lat'))
@@ -130,7 +136,8 @@ def process_coordinates():
         # json_data = df.to_json(orient='values')
         
         try:
-            shrunk_data = shrink_dataframe(df, 30)
+            # shrunk_data = shrink_dataframe(df, 30)
+            shrunk_data = nearest_neighbor(df, num_x_slice, num_y_slice)
 
             shape = shrunk_data.shape
 
