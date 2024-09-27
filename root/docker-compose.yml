@@ -1,0 +1,24 @@
+
+services:
+  webscraper:
+    image: webscrape
+    build:
+      context: ./OSGC_webscraper
+      dockerfile: Dockerfile
+    volumes:
+      - my_volume:/data
+    # ports:
+    #   - "5000:5000"  
+  API:
+    image: osgc_api
+    mem_limit: 2g
+    build:
+      context: ./OSGC_API
+      dockerfile: Dockerfile
+    volumes:
+      - my_volume:/data
+    ports:
+      - "8080:8080"
+volumes:
+  my_volume:
+    driver: local

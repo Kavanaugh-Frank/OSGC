@@ -1,0 +1,17 @@
+name: myenv
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.8
+  - numpy
+  - flask
+  - pandas
+  - flask
+  - rasterio
+  - gdal
+  - matplotlib
+  - pip
+  - pip:
+      - georasters
+
