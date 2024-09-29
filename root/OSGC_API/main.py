@@ -12,14 +12,17 @@ import threading
 import math
 import numpy as np
 
-from functions.shrink_array import shrink_dataframe
+from functions.calculate_shape import calculate_shape
 from functions.calculate_files import calculate_num_files
 from functions.lookup_file import look_up_file
+
 from functions.tiff_func import create_blank_tiff
 from functions.tiff_func import df_to_tiff
 from functions.tiff_func import get_resolution
-from functions.calculate_shape import calculate_shape
+
 from functions.shrink_array import nearest_neighbor
+from functions.shrink_array import shrink_dataframe
+from functions.shrink_array import interpolation
 
 
 matplotlib.use('Agg')
@@ -133,28 +136,22 @@ def process_coordinates():
         # thread = threading.Thread(target=df_to_tiff(df, os.path.join(volume_directory, f"confirm.tiff")))
         # thread.start()
 
-        # json_data = df.to_json(orient='values')
-        
         try:
             # shrunk_data = shrink_dataframe(df, 30)
-            shrunk_data = nearest_neighbor(df, num_x_slice, num_y_slice)
+            # shrunk_data = nearest_neighbor(df, num_x_slice, num_y_slice)
+            shrunk_data = interpolation(df, num_x_slice, num_y_slice)
 
             shape = shrunk_data.shape
 
             shrunk_json = shrunk_data.to_json(orient='values')
 
-            return jsonify({
-                'shape': shape,
-                'data': shrunk_json
-            })
-            # return jsonify(shrunk_json)
         except:
             abort(404, "Shrinking Failed")
     
-
-        return shrunk_data
-        # return jsonify(json_data)
-
+        return jsonify({
+            'shape': shape,
+            'data': shrunk_json
+        })
     finally:
         # Cleanup
         if os.path.exists(full_temp_file_name):

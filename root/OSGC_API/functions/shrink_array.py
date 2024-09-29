@@ -61,6 +61,72 @@ def nearest_neighbor(df, num_x_slice, num_y_slice):
 
     return sliced_df
 
-    
 
-        
+# use bilinear interpolation
+def interpolation(df, num_x_slice, num_y_slice):
+    x_resolution, y_resolution = df.shape
+
+    x_percent_spacing = 100 / (num_x_slice - 1) if num_x_slice > 1 else 0
+    y_percent_spacing = 100 / (num_y_slice - 1) if num_y_slice > 1 else 0
+    
+    x_indices = []
+    x_indices_decimal = []
+    for i in range(num_x_slice - 1):
+        index = math.floor(((i * x_percent_spacing) / 100) * (x_resolution - 1))
+        x_indices.append(index)
+
+        index_remainder = ((i * x_percent_spacing) / 100) * (x_resolution - 1) % 1
+        x_indices_decimal.append(index_remainder)
+
+    x_indices.append(x_resolution - 1)
+    x_indices_decimal.append(0)
+
+    y_indices = []
+    y_indices_decimal = []
+    for i in range(num_y_slice - 1):
+        index = math.floor(((i * y_percent_spacing) / 100) * (y_resolution - 1))
+        y_indices.append(index)
+
+        index_remainder = ((i * y_percent_spacing) / 100) * (y_resolution - 1) % 1
+        y_indices_decimal.append(index_remainder)
+
+
+    y_indices.append(y_resolution - 1)
+    y_indices_decimal.append(0)
+
+    shrunken_array = []
+    for x_counter in range(num_x_slice):
+        temp_array = []
+        for y_counter in range(num_y_slice):
+            # f(x,y)=f(0,0)(1−x)(1−y)+f(1,0)x(1−y)+f(0,1)(1−x)y+f(1,1)xy
+            x_index = x_indices[x_counter]
+            y_index = y_indices[y_counter]
+
+            # since we round down on the indices our current index is the top left of 4 squares
+            # so we take the surrounding three tiles to the right and bottom
+            top_left_value = df.iat[x_index, y_index] if x_index < x_resolution and y_index < y_resolution else 0
+            bottom_right_value = df.iat[x_index + 1, y_index + 1] if x_index < x_resolution - 1 and y_index < y_resolution - 1 else 0
+            bottom_left_value = df.iat[x_index + 1, y_index] if x_index < x_resolution - 1 and y_index < y_resolution else 0
+            top_right_value = df.iat[x_index, y_index + 1] if x_index < x_resolution and y_index < y_resolution - 1 else 0
+
+            # the decimal values from the calculated index
+            x_distance = x_indices_decimal[x_counter]
+            y_distance = y_indices_decimal[y_counter]
+
+            # f(0,0)(1−x)(1−y)
+            v1 = top_left_value * (1 - x_distance) * (1 - y_distance)
+            # f(1,0)x(1−y)
+            v2 = top_right_value * x_distance * (1 - y_distance)
+            # f(0,1)(1−x)y
+            v3 = bottom_left_value * (1 - x_distance) * y_distance
+            # f(1,1)xy
+            v4 = bottom_right_value * x_distance * y_distance
+
+            # get the final value
+            final_value = v1 + v2 + v3 + v4
+
+            temp_array.append(final_value)
+
+        shrunken_array.append(temp_array)
+
+    return pd.DataFrame(shrunken_array)
