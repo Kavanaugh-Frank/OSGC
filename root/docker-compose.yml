@@ -11,7 +11,7 @@ services:
     #   - "5000:5000"  
   API:
     image: osgc_api
-    mem_limit: 2g
+    mem_limit: 4g
     build:
       context: ./OSGC_API
       dockerfile: Dockerfile

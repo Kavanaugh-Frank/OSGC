@@ -15,3 +15,22 @@ dependencies:
   - pip:
       - georasters
 
+# name: myenv
+# channels:
+#   - defaults
+#   - conda-forge
+# dependencies:
+#   - python=3.8
+#   - numpy
+#   - flask
+#   - pandas
+#   - rasterio
+#   - gdal
+#   - matplotlib
+#   - geos=3.11.4                # Specify a compatible GEOS version
+#   - shapely=1.8.4              # Use a compatible version of Shapely with GEOS
+#   - pygeos=0.13.0              # Use a compatible version of PyGEOS with GEOS
+#   - geopandas=0.12.2           # Use a compatible version of GeoPandas with Shapely and PyGEOS
+#   - pip
+#   - pip:
+#       - georasters

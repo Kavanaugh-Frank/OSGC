@@ -14,6 +14,7 @@ import numpy as np
 
 from functions.calculate_shape import calculate_shape
 from functions.calculate_files import calculate_num_files
+
 from functions.lookup_file import look_up_file
 
 from functions.tiff_func import create_blank_tiff
@@ -23,6 +24,8 @@ from functions.tiff_func import get_resolution
 from functions.shrink_array import nearest_neighbor
 from functions.shrink_array import shrink_dataframe
 from functions.shrink_array import interpolation
+
+from functions.scatter_plot import make_scatter_plot
 
 
 matplotlib.use('Agg')
@@ -136,11 +139,11 @@ def process_coordinates():
         # thread = threading.Thread(target=df_to_tiff(df, os.path.join(volume_directory, f"confirm.tiff")))
         # thread.start()
 
+
         try:
             # shrunk_data = shrink_dataframe(df, 30)
             # shrunk_data = nearest_neighbor(df, num_x_slice, num_y_slice)
             shrunk_data = interpolation(df, num_x_slice, num_y_slice)
-
             shape = shrunk_data.shape
 
             shrunk_json = shrunk_data.to_json(orient='values')
@@ -148,6 +151,13 @@ def process_coordinates():
         except:
             abort(404, "Shrinking Failed")
     
+
+        # try:
+        #     make_scatter_plot(shrunk_data)
+        # except:
+        #     abort(404, "Matplotlib Scatter Plot Failed")
+
+        
         return jsonify({
             'shape': shape,
             'data': shrunk_json
