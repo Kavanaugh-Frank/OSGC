@@ -16,6 +16,8 @@ SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"]
 # Copy the rest of the application code to the container
 COPY . .
 
+USER root
+
 EXPOSE 8080
 
 # Set the entry point to use the conda environment's Python interpreter

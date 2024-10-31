@@ -1,173 +1,74 @@
-import os
-import math
-import uuid
-import rasterio
-import pandas as pd
-import georasters as gr
-from flask import Flask, request, jsonify, abort, send_file, Response
+# import rasterio
+from flask import Flask, request, jsonify, abort
 from osgeo import gdal
-import matplotlib.pyplot as plt
-import matplotlib
-import threading
-import math
-import numpy as np
-
-from functions.calculate_shape import calculate_shape
-from functions.calculate_files import calculate_num_files
-
-from functions.lookup_file import look_up_file
-
-from functions.tiff_func import create_blank_tiff
-from functions.tiff_func import df_to_tiff
-from functions.tiff_func import get_resolution
-
-from functions.shrink_array import nearest_neighbor
-from functions.shrink_array import shrink_dataframe
-from functions.shrink_array import interpolation
-
-from functions.scatter_plot import make_scatter_plot
 
 
-matplotlib.use('Agg')
+from helpers.calculate_files import calculate_num_files  # Calculates the number of files needed based on coordinates
+from helpers.lookup_file import look_up_file  # Looks up the file based on given coordinates
+from helpers.resolution import get_resolution  # Retrieves the resolution of a given file
+from helpers.cleanup import cleanup_temp_files  # Cleans up temporary files created during processing
+from helpers.shrink_convert import shrink_and_convert_to_json  # Shrinks data and converts it to JSON format
+from helpers.process_files import process_files  # Processes the files based on given parameters
+from helpers.create_temp import create_temp_file  # Creates a temporary file for intermediate processing
+from helpers.get_data import extract_request_data, calculate_ceilings  # Extracts data from the request and calculates ceiling values for coordinates
+
+from config import volume_directory
+
 gdal.DontUseExceptions()
 
 app = Flask(__name__)
 
-# Path to the shared volume directory (mounted in the Docker container)
-volume_directory = "/data"
 
-@app.route('/process_coordinates', methods=['POST'])
+@app.route("/process_coordinates", methods=["POST"])
 def process_coordinates():
-    # Get the JSON data from the POST request
     data = request.json
+    num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, radar_lat, radar_long = (
+        extract_request_data(data)
+    )
+    upper_lat_ceil, lower_lat_ceil, upper_long_ceil, lower_long_ceil = (
+        calculate_ceilings(upper_lat, lower_lat, upper_long, lower_long)
+    )
 
-    # Get the X-Y Slices
-    num_x_slice = data.get("num_x_slice")
-    num_y_slice = data.get("num_y_slice")
-
-
-    # Get the untouched data
-    upper_lat = float(data.get('upper_lat'))
-    lower_lat = float(data.get('lower_lat'))
-    upper_long = float(data.get('upper_long'))
-    lower_long = float(data.get('lower_long'))
-    print(upper_lat, upper_long, lower_lat, lower_long)
-
-    # Ceiling
-    upper_lat_ceil = math.ceil(abs(upper_lat))
-    lower_lat_ceil = math.ceil(abs(lower_lat))
-    upper_long_ceil = math.ceil(abs(upper_long))
-    lower_long_ceil = math.ceil(abs(lower_long))
-    print(upper_lat_ceil, upper_long_ceil, lower_lat_ceil, lower_long_ceil)
-
-    # Look up the file in the shared volume directory
-    file = look_up_file(upper_lat_ceil, upper_long_ceil, upper_lat, upper_long, base_dir=volume_directory)
-
+    file = look_up_file(
+        upper_lat_ceil,
+        upper_long_ceil,
+        upper_lat,
+        upper_long,
+        base_dir=volume_directory,
+    )
     if file is None:
         abort(404, "File not found")
-        
+
     resolution_width, resolution_height = get_resolution(file)
     if resolution_width != resolution_height:
         print("The height and width does not match")
 
-    print("Width and Height of the Upper Left Lat and Long Image Only: ", resolution_width, resolution_height)
+    temp_file_name, full_temp_file_name = create_temp_file()
+    merged_file_name, full_merged_file_name = create_temp_file()
 
-    # Define paths for the temp files
-    temp_file_name = str(uuid.uuid4()) + '.tiff'
-    full_temp_file_name = os.path.join(volume_directory, temp_file_name)
+    num_files_needed = calculate_num_files(
+        upper_lat_ceil, lower_lat_ceil, upper_long_ceil, lower_long_ceil
+    )
+    df = process_files(
+        num_files_needed,
+        file,
+        upper_lat,
+        upper_long,
+        lower_lat,
+        lower_long,
+        resolution_width,
+        full_temp_file_name,
+        full_merged_file_name,
+    )
 
-    merged_file_name = str(uuid.uuid4()) + '.tiff'
-    full_merged_file_name = os.path.join(volume_directory, merged_file_name)
+    # the [0,0,0] is the offset point, this should be user input at some point
+    shrunk_json, shape = shrink_and_convert_to_json(
+        df, num_x_slice, num_y_slice, upper_lat, upper_long, lower_lat, lower_long, [radar_lat,radar_long,0]
+    )
 
-    # Create a blank TIFF file in the shared volume
-    create_blank_tiff(full_temp_file_name)
+    cleanup_temp_files([full_temp_file_name, full_merged_file_name])
 
-    df = None
-    num_files_needed = calculate_num_files(upper_lat_ceil, lower_lat_ceil, upper_long_ceil, lower_long_ceil)
-    
-    if num_files_needed == 1:
-        window = calculate_shape(upper_lat, upper_long, lower_lat, lower_long, resolution_width)
-        gdal.Translate(full_temp_file_name, file, srcWin=window)
-
-        img = rasterio.open(full_temp_file_name)
-        full_img = img.read()
-        df = pd.DataFrame(full_img[0])
-        img.close()
-        
-    elif num_files_needed == 2:
-        lower_file = look_up_file(lower_lat_ceil, lower_long_ceil, lower_lat, lower_long, base_dir=volume_directory)
-        if lower_file is None:
-            abort(404, "Lower file not found")
-
-        files_to_merge = [file, lower_file]
-        g = gdal.Warp(full_merged_file_name, files_to_merge, format="GTiff")
-        g = None
-
-        window = calculate_shape(upper_lat, upper_long, lower_lat, lower_long, resolution_width)
-        gdal.Translate(full_temp_file_name, full_merged_file_name, srcWin=window)
-
-        img = rasterio.open(full_temp_file_name)
-        full_img = img.read()
-        df = pd.DataFrame(full_img[0])
-        img.close()
-
-    elif num_files_needed == 4:
-        bottom_left_file = look_up_file(upper_lat_ceil, lower_long_ceil, upper_lat, lower_long, base_dir=volume_directory)
-        bottom_right_file = look_up_file(lower_lat_ceil, lower_long_ceil, lower_lat, lower_long, base_dir=volume_directory)
-        top_right_file = look_up_file(lower_lat_ceil, upper_long_ceil, lower_lat, lower_long, base_dir=volume_directory)
-
-        if None in [bottom_left_file, bottom_right_file, top_right_file]:
-            abort(404, "One of the mosaic files was not found")
-
-        files_to_merge = [file, bottom_right_file, top_right_file, bottom_left_file]
-        g = gdal.Warp(full_merged_file_name, files_to_merge, format="GTiff")
-        g = None
-
-        window = calculate_shape(upper_lat, upper_long, lower_lat, lower_long, resolution_width)
-        gdal.Translate(full_temp_file_name, full_merged_file_name, srcWin=window)
-
-        img = rasterio.open(full_temp_file_name)
-        full_img = img.read()
-        df = pd.DataFrame(full_img[0])
-        img.close()
-
-    else:
-        abort(404, "The Input Coordinates could not resolve in 1, 2, or 4 TIFF files")
-
-    try:
-        # Save the result to the shared volume
-        # thread = threading.Thread(target=df_to_tiff(df, os.path.join(volume_directory, f"confirm.tiff")))
-        # thread.start()
+    return jsonify({"shape": shape, "data": shrunk_json})
 
 
-        try:
-            # shrunk_data = shrink_dataframe(df, 30)
-            # shrunk_data = nearest_neighbor(df, num_x_slice, num_y_slice)
-            shrunk_data = interpolation(df, num_x_slice, num_y_slice)
-            shape = shrunk_data.shape
-
-            shrunk_json = shrunk_data.to_json(orient='values')
-
-        except:
-            abort(404, "Shrinking Failed")
-    
-
-        # try:
-        #     make_scatter_plot(shrunk_data)
-        # except:
-        #     abort(404, "Matplotlib Scatter Plot Failed")
-
-        
-        return jsonify({
-            'shape': shape,
-            'data': shrunk_json
-        })
-    finally:
-        # Cleanup
-        if os.path.exists(full_temp_file_name):
-            os.remove(full_temp_file_name)
-        if os.path.exists(full_merged_file_name):
-            os.remove(full_merged_file_name)
-
-
-app.run(host='0.0.0.0', port=8080, debug=True)
+app.run(host="0.0.0.0", port=8080, debug=True)

@@ -1,6 +1,5 @@
 from osgeo import gdal
-import rasterio
-
+from flask import abort
 
 """
 Takes in the dataframe and the desired save location to take in the dataframe 
@@ -34,13 +33,7 @@ def create_blank_tiff(output_tiff_path):
     # Create a blank TIFF file
     driver = gdal.GetDriverByName('GTiff')
     # 1 is the Height, Width, and Number of Channels of this blank file
-    driver.Create(output_tiff_path, 1, 1, 1, gdal.GDT_Byte)
-
-"""
-Finds a returns the resolution (height and width in pixels) of the requested tiff file
-"""
-def get_resolution(tiff_path):
-    with rasterio.open(tiff_path) as src:
-        resolution_width = src.width
-        resolution_height = src.height
-    return resolution_width, resolution_height
+    try:
+        driver.Create(output_tiff_path, 1, 1, 1, gdal.GDT_Byte)
+    except:
+        abort(404, "Creation of Blank TIFF failed")

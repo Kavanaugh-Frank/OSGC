@@ -1,6 +1,7 @@
 import math
 import pandas as pd
-
+from functions.ecef import latlon_to_ecef
+from decimal import Decimal
 """
     Reduces the size of a DataFrame by selecting a subset of rows and columns
     based on the desired `target_size`. It calculates step sizes to pick rows and
@@ -88,161 +89,25 @@ def nearest_neighbor(df, num_x_slice, num_y_slice):
 
     return sliced_df
 
-# def interpolation(df, num_x_slice, num_y_slice):
-#     x_resolution, y_resolution = df.shape
 
-#     x_percent_spacing = 100 / (num_x_slice - 1) if num_x_slice > 1 else 0
-#     y_percent_spacing = 100 / (num_y_slice - 1) if num_y_slice > 1 else 0
-    
-#     x_indices = []
-#     x_indices_decimal = []
-#     for i in range(num_x_slice):
-#         index = min(math.floor((i * x_percent_spacing / 100) * (x_resolution - 1)), x_resolution - 1)
-#         x_indices.append(index)
-
-#         index_remainder = ((i * x_percent_spacing) / 100) * (x_resolution - 1) % 1
-#         x_indices_decimal.append(index_remainder)
-
-#     y_indices = []
-#     y_indices_decimal = []
-#     for i in range(num_y_slice):
-#         index = min(math.floor((i * y_percent_spacing / 100) * (y_resolution - 1)), y_resolution - 1)
-#         y_indices.append(index)
-
-#         index_remainder = ((i * y_percent_spacing) / 100) * (y_resolution - 1) % 1
-#         y_indices_decimal.append(index_remainder)
-
-    # shrunken_array = []
-    # for x_counter in range(num_x_slice - 1):
-    #     temp_array = []
-    #     for y_counter in range(num_y_slice - 1):
-    #         x_index = x_indices[x_counter]
-    #         y_index = y_indices[y_counter]
-
-    #         # Initialize values
-    #         top_left_value = df.iat[x_index, y_index] if x_index < x_resolution and y_index < y_resolution else 0
-    #         bottom_right_value = df.iat[x_index + 1, y_index + 1] if x_index < x_resolution - 1 and y_index < y_resolution - 1 else 0
-    #         bottom_left_value = df.iat[x_index + 1, y_index] if x_index < x_resolution - 1 and y_index < y_resolution else 0
-    #         top_right_value = df.iat[x_index, y_index + 1] if x_index < x_resolution and y_index < y_resolution - 1 else 0
-
-    #         # The decimal values from the calculated index
-    #         x_distance = x_indices_decimal[x_counter]
-    #         y_distance = y_indices_decimal[y_counter]
-
-    #         # Interpolation calculation
-    #         v1 = top_left_value * (1 - x_distance) * (1 - y_distance)
-    #         v2 = top_right_value * x_distance * (1 - y_distance)
-    #         v3 = bottom_left_value * (1 - x_distance) * y_distance
-    #         v4 = bottom_right_value * x_distance * y_distance
-
-    #         # Final value
-    #         final_value = v1 + v2 + v3 + v4
-    #         temp_array.append(final_value)
-
-    #     shrunken_array.append(temp_array)
-
-    # return pd.DataFrame(shrunken_array)
-# def interpolation(df, num_x_slice, num_y_slice):
-#     # Get the resolution of the dataframe (number of rows and columns)
-#     x_resolution, y_resolution = df.shape
-
-#     # Calculate spacing percentages for x and y
-#     x_percent_spacing = 100 / (num_x_slice - 1) if num_x_slice > 1 else 0
-#     y_percent_spacing = 100 / (num_y_slice - 1) if num_y_slice > 1 else 0
-
-#     # Generate index positions and decimal remainders for x and y
-#     x_indices = []
-#     x_indices_decimal = []
-#     for i in range(num_x_slice):
-#         index = min(math.floor((i * x_percent_spacing / 100) * (x_resolution - 1)), x_resolution - 1)
-#         x_indices.append(index)
-#         index_remainder = ((i * x_percent_spacing) / 100) * (x_resolution - 1) % 1
-#         x_indices_decimal.append(index_remainder)
-
-#     y_indices = []
-#     y_indices_decimal = []
-#     for i in range(num_y_slice):
-#         index = min(math.floor((i * y_percent_spacing / 100) * (y_resolution - 1)), y_resolution - 1)
-#         y_indices.append(index)
-#         index_remainder = ((i * y_percent_spacing) / 100) * (y_resolution - 1) % 1
-#         y_indices_decimal.append(index_remainder)
-
-#     # Step 1: Bilinear interpolation for all but the bottom row and the right-most column
-#     shrunken_array = []
-#     for x_counter in range(num_x_slice - 1):
-#         temp_array = []
-#         for y_counter in range(num_y_slice - 1):
-#             x_index = x_indices[x_counter]
-#             y_index = y_indices[y_counter]
-
-#             # Initialize values for bilinear interpolation
-#             top_left_value = df.iat[x_index, y_index] if x_index < x_resolution and y_index < y_resolution else 0
-#             bottom_right_value = df.iat[x_index + 1, y_index + 1] if x_index < x_resolution - 1 and y_index < y_resolution - 1 else 0
-#             bottom_left_value = df.iat[x_index + 1, y_index] if x_index < x_resolution - 1 and y_index < y_resolution else 0
-#             top_right_value = df.iat[x_index, y_index + 1] if x_index < x_resolution and y_index < y_resolution - 1 else 0
-
-#             # The decimal values from the calculated index
-#             x_distance = x_indices_decimal[x_counter]
-#             y_distance = y_indices_decimal[y_counter]
-
-#             # Bilinear interpolation calculation
-#             v1 = top_left_value * (1 - x_distance) * (1 - y_distance)
-#             v2 = top_right_value * x_distance * (1 - y_distance)
-#             v3 = bottom_left_value * (1 - x_distance) * y_distance
-#             v4 = bottom_right_value * x_distance * y_distance
-
-#             # Final value with bilinear interpolation
-#             final_value = v1 + v2 + v3 + v4
-#             temp_array.append(final_value)
-
-#         shrunken_array.append(temp_array)
-
-#     # Step 2: Handle linear interpolation for the bottom row
-#     bottom_row = []
-#     for y_counter in range(num_y_slice - 1):
-#         x_index = x_indices[-1]  # Last x index for the bottom row
-#         y_index = y_indices[y_counter]
-
-#         # Linear interpolation between the bottom-left and bottom-right values
-#         left_value = df.iat[x_index, y_index]
-#         right_value = df.iat[x_index, y_index + 1] if y_index < y_resolution - 1 else left_value
-#         y_distance = y_indices_decimal[y_counter]
-#         final_value = left_value * (1 - y_distance) + right_value * y_distance
-#         bottom_row.append(final_value)
-
-#     # Append the bottom row to the shrunken array
-#     shrunken_array.append(bottom_row)
-
-#     # Step 3: Handle linear interpolation for the right-most column
-#     for x_counter in range(num_x_slice - 1):
-#         x_index = x_indices[x_counter]
-#         y_index = y_indices[-1]  # Last y index for the right-most column
-
-#         # Linear interpolation between the top-right and bottom-right values
-#         top_value = df.iat[x_index, y_index]
-#         bottom_value = df.iat[x_index + 1, y_index] if x_index < x_resolution - 1 else top_value
-#         x_distance = x_indices_decimal[x_counter]
-#         final_value = top_value * (1 - x_distance) + bottom_value * x_distance
-
-#         # Append the interpolated value to the last row in the shrunken array
-#         shrunken_array[x_counter].append(final_value)
-
-#     # Handle the bottom-right corner value explicitly
-#     bottom_right_value = df.iat[x_indices[-1], y_indices[-1]]
-#     shrunken_array[-1].append(bottom_right_value)
-
-#     # Return the new dataframe
-#     return pd.DataFrame(shrunken_array)
-def interpolation(df, num_x_slice, num_y_slice):
-    """ using bilinear and linear interpolation, return a shrunken DF that represetns the changes in elevtaion of the larger dataset
-
-    Args:
-        df ([float, float, float]): The full DF of the dataset to by shrunk
-        num_x_slice (int): number of elements to represent the X coordinate
-        num_y_slice (int): number of elements to represent the Y coordinate
-
+def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_distance, point=[0,0,0]):
+    """
+    Perform bilinear and linear interpolation on a given dataframe to shrink it to a specified size.
+    Parameters:
+    df (pd.DataFrame): The input dataframe containing the data to be interpolated.
+    num_x_slice (int): The number of slices in the x-direction (latitude).
+    num_y_slice (int): The number of slices in the y-direction (longitude).
+    lat (float): The starting latitude.
+    long (float): The starting longitude.
+    lat_difference (float): The total difference in latitude to be covered.
+    long_distance (float): The total difference in longitude to be covered.
     Returns:
-        DF([float, float, float]): 2D Array where each element is an array of 3 points [X,Y,Z]
+    pd.DataFrame: A new dataframe containing the interpolated values with columns for X, Y, and Z coordinates.
+    Notes:
+    - The function first performs bilinear interpolation for all but the bottom row and the right-most column.
+    - Linear interpolation is then applied to the bottom row and the right-most column.
+    - The bottom-right corner value is handled explicitly.
+    - The latitude and longitude for each interpolated point are calculated and converted to ECEF coordinates.
     """
     # Get the resolution of the dataframe (number of rows and columns)
     x_resolution, y_resolution = df.shape
@@ -270,6 +135,9 @@ def interpolation(df, num_x_slice, num_y_slice):
 
     # Step 1: Bilinear interpolation for all but the bottom row and the right-most column
     shrunken_array = []
+    lat_step = lat_difference / (num_x_slice - 1)  # Corrected latitude step size
+    long_step = long_distance / (num_y_slice - 1)  # Longitude step size
+
     for x_counter in range(num_x_slice - 1):
         temp_array = []
         for y_counter in range(num_y_slice - 1):
@@ -286,19 +154,28 @@ def interpolation(df, num_x_slice, num_y_slice):
             x_distance = x_indices_decimal[x_counter]
             y_distance = y_indices_decimal[y_counter]
 
-            # Bilinear interpolation calculation
+            # Bilinear interpolation calculation for elevation
             v1 = top_left_value * (1 - x_distance) * (1 - y_distance)
             v2 = top_right_value * x_distance * (1 - y_distance)
             v3 = bottom_left_value * (1 - x_distance) * y_distance
             v4 = bottom_right_value * x_distance * y_distance
 
-            # Final value with bilinear interpolation (z value)
-            z_value = v1 + v2 + v3 + v4
+            # Final interpolated elevation value
+            final_value = v1 + v2 + v3 + v4
 
-            # Store the [x, y, z] value at this point
-            exact_x = x_index + x_distance
-            exact_y = y_index + y_distance
-            temp_array.append([exact_x, exact_y, z_value])
+            # Calculate latitude and longitude for the current point
+            current_lat = lat - (x_counter * lat_step)  # Using corrected lat_step
+            current_long = long + (y_counter * long_step)  # Using corrected long_step
+
+            X, Y, Z = latlon_to_ecef(current_lat, current_long, final_value)
+            # Convert the point to ECEF coordinates
+            point_ecef = latlon_to_ecef(point[0], point[1], point[2])
+            # Apply the offset point using Decimal for precision
+            X = Decimal(X) - Decimal(point_ecef[0])
+            Y = Decimal(Y) - Decimal(point_ecef[1])
+            Z = Decimal(Z) - Decimal(point_ecef[2])
+            # Append the array [lat, long, elevation]
+            temp_array.append([X, Y, Z])
 
         shrunken_array.append(temp_array)
 
@@ -312,12 +189,20 @@ def interpolation(df, num_x_slice, num_y_slice):
         left_value = df.iat[x_index, y_index]
         right_value = df.iat[x_index, y_index + 1] if y_index < y_resolution - 1 else left_value
         y_distance = y_indices_decimal[y_counter]
-        z_value = left_value * (1 - y_distance) + right_value * y_distance
+        final_value = left_value * (1 - y_distance) + right_value * y_distance
 
-        # Store the [x, y, z] value for the bottom row
-        exact_x = x_index
-        exact_y = y_index + y_distance
-        bottom_row.append([exact_x, exact_y, z_value])
+        # Calculate latitude and longitude for the current point
+        current_lat = lat - ((num_x_slice - 1) * lat_step)
+        current_long = long + (y_counter * long_step)
+
+        X, Y, Z = latlon_to_ecef(current_lat, current_long, final_value)
+        # Convert the point to ECEF coordinates
+        point_ecef = latlon_to_ecef(point[0], point[1], point[2])
+        # Apply the offset point using Decimal for precision
+        X = Decimal(X) - Decimal(point_ecef[0])
+        Y = Decimal(Y) - Decimal(point_ecef[1])
+        Z = Decimal(Z) - Decimal(point_ecef[2])
+        bottom_row.append([X, Y, Z])
 
     # Append the bottom row to the shrunken array
     shrunken_array.append(bottom_row)
@@ -331,17 +216,35 @@ def interpolation(df, num_x_slice, num_y_slice):
         top_value = df.iat[x_index, y_index]
         bottom_value = df.iat[x_index + 1, y_index] if x_index < x_resolution - 1 else top_value
         x_distance = x_indices_decimal[x_counter]
-        z_value = top_value * (1 - x_distance) + bottom_value * x_distance
+        final_value = top_value * (1 - x_distance) + bottom_value * x_distance
 
-        # Append the [x, y, z] value to the right-most column in the shrunken array
-        exact_x = x_index + x_distance
-        exact_y = y_index
-        shrunken_array[x_counter].append([exact_x, exact_y, z_value])
+        # Calculate latitude and longitude for the current point
+        current_lat = lat - (x_counter * lat_step)
+        current_long = long + ((num_y_slice - 1) * long_step)
+
+        X, Y, Z = latlon_to_ecef(current_lat, current_long, final_value)
+        # Convert the point to ECEF coordinates
+        point_ecef = latlon_to_ecef(point[0], point[1], point[2])
+        # Apply the offset point using Decimal for precision
+        X = Decimal(X) - Decimal(point_ecef[0])
+        Y = Decimal(Y) - Decimal(point_ecef[1])
+        Z = Decimal(Z) - Decimal(point_ecef[2])
+        # Append the array [lat, long, elevation]
+        shrunken_array[x_counter].append([X, Y, Z])
 
     # Handle the bottom-right corner value explicitly
     bottom_right_value = df.iat[x_indices[-1], y_indices[-1]]
-    shrunken_array[-1].append([x_indices[-1], y_indices[-1], bottom_right_value])
+    current_lat = lat - ((num_x_slice - 1) * lat_step)
+    current_long = long + ((num_y_slice - 1) * long_step)
 
-    # Return the new dataframe with [x, y, z] arrays
+    X, Y, Z = latlon_to_ecef(current_lat, current_long, bottom_right_value)
+    # Convert the point to ECEF coordinates
+    point_ecef = latlon_to_ecef(point[0], point[1], point[2])
+    # Apply the offset point using Decimal for precision
+    X = Decimal(X) - Decimal(point_ecef[0])
+    Y = Decimal(Y) - Decimal(point_ecef[1])
+    Z = Decimal(Z) - Decimal(point_ecef[2])
+    shrunken_array[-1].append([X, Y, Z])
+
+    # Return the new dataframe with lat, long, and elevation
     return pd.DataFrame(shrunken_array)
-
