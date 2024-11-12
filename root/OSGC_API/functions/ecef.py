@@ -17,7 +17,7 @@ def latlon_to_ecef(lat, lon, alt=0):
         lamb = Decimal(math.radians(float(lon)))
         h = Decimal(float(alt))
     except TypeError:
-        abort(404, f"failed conversion of ECEF")
+        abort(404, f"failed conversion of data types in ECEF conversion")
 
     N = a / Decimal(math.sqrt(1 - e**2 * Decimal(math.sin(phi))**2))
 

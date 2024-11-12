@@ -22,7 +22,7 @@ app = Flask(__name__)
 @app.route("/process_coordinates", methods=["POST"])
 def process_coordinates():
     data = request.json
-    num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, radar_lat, radar_long = (
+    num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, radar_lat, radar_long, radar_height = (
         extract_request_data(data)
     )
     upper_lat_ceil, lower_lat_ceil, upper_long_ceil, lower_long_ceil = (
@@ -49,6 +49,7 @@ def process_coordinates():
     num_files_needed = calculate_num_files(
         upper_lat_ceil, lower_lat_ceil, upper_long_ceil, lower_long_ceil
     )
+
     df = process_files(
         num_files_needed,
         file,
@@ -61,9 +62,8 @@ def process_coordinates():
         full_merged_file_name,
     )
 
-    # the [0,0,0] is the offset point, this should be user input at some point
     shrunk_json, shape = shrink_and_convert_to_json(
-        df, num_x_slice, num_y_slice, upper_lat, upper_long, lower_lat, lower_long, [radar_lat,radar_long,0]
+        df, num_x_slice, num_y_slice, upper_lat, upper_long, lower_lat, lower_long, [radar_lat,radar_long,radar_height]
     )
 
     cleanup_temp_files([full_temp_file_name, full_merged_file_name])

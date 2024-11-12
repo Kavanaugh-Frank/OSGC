@@ -9,7 +9,8 @@ def extract_request_data(data):
     lower_long = float(data.get("lower_long"))
     radar_lat = float(data.get("radar_lat"))
     radar_long = float(data.get("radar_long"))
-    return num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, radar_lat, radar_long
+    radar_height = float(data.get("radar_height"))
+    return num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, radar_lat, radar_long, radar_height
 
 
 def calculate_ceilings(upper_lat, lower_lat, upper_long, lower_long):
