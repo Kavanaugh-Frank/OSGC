@@ -1,14 +1,15 @@
 from osgeo import gdal
 from flask import abort
 
-"""
-Takes in the dataframe and the desired save location to take in the dataframe 
-with elevation data and reacreates the TIFF file that the information comes from. 
-Used mostly to double check the data in the dataframe matches the inputted TIFF
-
-Does not return anything, but does save a TIFF file
-"""
 def df_to_tiff(df, output_tiff_path):
+    """
+    Converts a pandas DataFrame to a TIFF file.
+    Parameters:
+    df (pandas.DataFrame): The DataFrame containing the data to be converted to TIFF.
+    output_tiff_path (str): The file path where the output TIFF file will be saved.
+    Returns:
+    None
+    """
     # Extract data from the DataFrame
     array = df.values
     height, width = array.shape
@@ -25,12 +26,16 @@ def df_to_tiff(df, output_tiff_path):
 
     dataset = None  # Close the dataset
 
-"""
-Created a blank tiff file that is overwritten with the new elevation data
-for the DF to Scatter plot function. Saves the output at a desired location
-"""
 def create_blank_tiff(output_tiff_path):
-    # Create a blank TIFF file
+    """
+    Create a blank TIFF file at the specified path.
+
+    Parameters:
+    output_tiff_path (str): The file path where the blank TIFF file will be created.
+
+    Raises:
+    HTTPException: If the creation of the blank TIFF file fails, a 404 error is raised with a message.
+    """
     driver = gdal.GetDriverByName('GTiff')
     # 1 is the Height, Width, and Number of Channels of this blank file
     try:

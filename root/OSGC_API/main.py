@@ -3,16 +3,17 @@ from flask import Flask, request, jsonify, abort
 from osgeo import gdal
 
 
-from helpers.calculate_files import calculate_num_files  # Calculates the number of files needed based on coordinates
-from helpers.lookup_file import look_up_file  # Looks up the file based on given coordinates
-from helpers.resolution import get_resolution  # Retrieves the resolution of a given file
-from helpers.cleanup import cleanup_temp_files  # Cleans up temporary files created during processing
-from helpers.shrink_convert import shrink_and_convert_to_json  # Shrinks data and converts it to JSON format
-from helpers.process_files import process_files  # Processes the files based on given parameters
-from helpers.create_temp import create_temp_file  # Creates a temporary file for intermediate processing
-from helpers.get_data import extract_request_data, calculate_ceilings  # Extracts data from the request and calculates ceiling values for coordinates
+from main_function.calculate_files import calculate_num_files  # Calculates the number of files needed based on coordinates
+from main_function.lookup_file import look_up_file  # Looks up the file based on given coordinates
+from main_function.resolution import get_resolution  # Retrieves the resolution of a given file
+from main_function.cleanup_temp import cleanup_temp_files  # Cleans up temporary files created during processing
+from main_function.shrink_convert import shrink_and_convert_to_json  # Shrinks data and converts it to JSON format
+from main_function.process_files import process_files  # Processes the files based on given parameters
+from main_function.create_temp import create_temp_file  # Creates a temporary file for intermediate processing
+from main_function.get_data import extract_request_data  # Extracts data from the request and calculates ceiling values for coordinates
 
 from config import volume_directory
+import math
 
 gdal.DontUseExceptions()
 
@@ -25,9 +26,11 @@ def process_coordinates():
     num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, radar_lat, radar_long, radar_height = (
         extract_request_data(data)
     )
-    upper_lat_ceil, lower_lat_ceil, upper_long_ceil, lower_long_ceil = (
-        calculate_ceilings(upper_lat, lower_lat, upper_long, lower_long)
-    )
+
+    upper_lat_ceil = math.ceil(upper_lat)
+    lower_lat_ceil = math.ceil(lower_lat)
+    upper_long_ceil = math.ceil(upper_long)
+    lower_long_ceil = math.ceil(lower_long)
 
     file = look_up_file(
         upper_lat_ceil,
@@ -36,10 +39,12 @@ def process_coordinates():
         upper_long,
         base_dir=volume_directory,
     )
+    
     if file is None:
         abort(404, "File not found")
 
     resolution_width, resolution_height = get_resolution(file)
+    
     if resolution_width != resolution_height:
         print("The height and width does not match")
 

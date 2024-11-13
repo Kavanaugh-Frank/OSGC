@@ -1,21 +1,9 @@
 import math
 import pandas as pd
-from functions.ecef import latlon_to_ecef
+from helpers.ecef import latlon_to_ecef
 from decimal import Decimal
-"""
-    Reduces the size of a DataFrame by selecting a subset of rows and columns
-    based on the desired `target_size`. It calculates step sizes to pick rows and
-    columns that are evenly spaced across the original DataFrame.
 
-    Parameters:
-    df (pd.DataFrame): The input DataFrame to be shrunk.
-    target_size (int): The desired number of rows and columns for the resulting DataFrame.
-
-    Returns:
-    pd.DataFrame: A new DataFrame with the selected rows and columns. If the original
-                  DataFrame is smaller or equal to the `target_size`, the original
-                  DataFrame is returned.
-"""
+""" These are not used in the final version of the code, but are kept here for reference purposes. """
 def shrink_dataframe(df, target_size):
     original_height, original_width = df.shape
     
@@ -50,20 +38,6 @@ def shrink_dataframe(df, target_size):
 
     return shrunk_df
 
-"""
-    Reduces the size of a DataFrame using the nearest neighbor method. The method
-    selects rows and columns based on the specified number of slices, choosing indices
-    that best match the spacing between slices.
-
-    Parameters:
-    df (pd.DataFrame): The input DataFrame to be sliced.
-    num_x_slice (int): The number of slices (or columns) desired in the resulting DataFrame.
-    num_y_slice (int): The number of slices (or rows) desired in the resulting DataFrame.
-
-    Returns:
-    pd.DataFrame: A new DataFrame with selected rows and columns based on nearest neighbor
-                  slicing.
-"""
 def nearest_neighbor(df, num_x_slice, num_y_slice):
     # x_slice is the number of horizontal pixels taken from the larger array and made to the smaller 
     # y_slice is the number of vertical pixels taken from the larger array and made to the smaller
