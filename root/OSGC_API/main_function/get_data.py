@@ -10,9 +10,9 @@ def extract_request_data(data):
             - "lower_lat" (str or float): Lower latitude boundary.
             - "upper_long" (str or float): Upper longitude boundary.
             - "lower_long" (str or float): Lower longitude boundary.
-            - "radar_lat" (str or float): Latitude of the radar.
-            - "radar_long" (str or float): Longitude of the radar.
-            - "radar_height" (str or float): Height of the radar.
+            - "gs_lat" (str or float): Latitude of the gs.
+            - "gs_long" (str or float): Longitude of the gs.
+            - "gs_height" (str or float): Height of the gs.
 
     Returns:
         tuple: A tuple containing the following elements:
@@ -22,9 +22,9 @@ def extract_request_data(data):
             - lower_lat (float)
             - upper_long (float)
             - lower_long (float)
-            - radar_lat (float)
-            - radar_long (float)
-            - radar_height (float)
+            - gs_lat (float)
+            - gs_long (float)
+            - gs_height (float)
     """
     num_x_slice = data.get("num_x_slice")
     num_y_slice = data.get("num_y_slice")
@@ -32,7 +32,8 @@ def extract_request_data(data):
     lower_lat = float(data.get("lower_lat"))
     upper_long = float(data.get("upper_long"))
     lower_long = float(data.get("lower_long"))
-    radar_lat = float(data.get("radar_lat"))
-    radar_long = float(data.get("radar_long"))
-    radar_height = float(data.get("radar_height"))
-    return num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, radar_lat, radar_long, radar_height
+    gs_lat = float(data.get("gs_lat"))
+    gs_long = float(data.get("gs_long"))
+    gs_height = float(data.get("gs_height"))
+    offset = float(data.get("offset"))
+    return num_x_slice, num_y_slice, upper_lat, lower_lat, upper_long, lower_long, gs_lat, gs_long, gs_height, offset
