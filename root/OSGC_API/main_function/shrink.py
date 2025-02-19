@@ -22,7 +22,7 @@ def shrink(df, num_x_slice, num_y_slice, upper_lat, upper_long, lower_lat, lower
     HTTPException: If the shrinking process fails, an HTTP 404 error is raised with the failure message.
     """
     try:
-        shrunk_data = interpolation(df, num_x_slice, num_y_slice, upper_lat, upper_long, abs(upper_lat - lower_lat), abs(upper_long - lower_long))
+        shrunk_data = interpolation(df, num_x_slice, num_y_slice, upper_lat, upper_long, abs(upper_lat - lower_lat), abs(upper_long - lower_long), point)
         shape = shrunk_data.shape
     except Exception as e:
         abort(404, f"Shrinking Failed {e}")

@@ -10,6 +10,8 @@ def df_to_tiff(df, output_tiff_path):
     Returns:
     None
     """
+
+    print("Converting DataFrame to TIFF...")
     # Extract data from the DataFrame
     array = df.values
     height, width = array.shape

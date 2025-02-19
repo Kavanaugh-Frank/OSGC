@@ -47,7 +47,7 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
     # construct the translation matrix
     translation_matrix = np.array([x_vector, y_vector, z_vector])
 
-    # dot produ ting the translation matrix with the data
+    # dot producting the translation matrix with the data
     data = data.applymap(lambda x: np.dot(translation_matrix, x))
 
     # Applying the offset to the X - Coordinate of each point

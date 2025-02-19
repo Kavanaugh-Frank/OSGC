@@ -12,6 +12,7 @@ from main_function.process_files import process_files  # Processes the files bas
 from main_function.create_temp import create_temp_file  # Creates a temporary file for intermediate processing
 from main_function.get_data import extract_request_data  # Extracts data from the request and calculates ceiling values for coordinates
 from main_function.translation_basis import translation_basis  # makes the 3 vectors needed for the translation matrix
+from helpers.tiff_func import df_to_tiff  # Converts a dataframe to a tiff file
 
 from config import volume_directory
 import math
@@ -68,6 +69,9 @@ def process_coordinates():
         full_merged_file_name,
     )
 
+    # output_path = "/app/temp.tiff"
+    # df_to_tiff(df, output_path)
+    
     shrunk_data, shape = shrink(
         df, num_x_slice, num_y_slice, upper_lat, upper_long, lower_lat, lower_long, [gs_lat,gs_long,gs_height]
     )

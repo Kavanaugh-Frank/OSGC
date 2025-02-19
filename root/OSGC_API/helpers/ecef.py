@@ -9,7 +9,8 @@ getcontext().prec = 30
 
 # these are for the grs80 ellipsoid
 a = Decimal('6378137.0')
-flattening = Decimal('1') / Decimal('298.257222101')
+b = Decimal('6356752.314140347')
+flattening = Decimal('1') / Decimal('298.257222100882711243')
 
 e = Decimal(2 * flattening) - Decimal(flattening ** 2)
 
@@ -35,10 +36,15 @@ def latlon_to_ecef(lat, lon, alt=0):
     except TypeError:
         abort(404, f"failed conversion of data types in ECEF conversion")
 
-    N = a / Decimal(math.sqrt(1 - e**2 * Decimal(math.sin(phi))**2))
+    sin_phi = Decimal(math.sin(phi))
+    cos_phi = Decimal(math.cos(phi))
+    cos_lamb = Decimal(math.cos(lamb))
+    sin_lamb = Decimal(math.sin(lamb))
 
-    X = (N + h) * Decimal(math.cos(phi)) * Decimal(math.cos(lamb))
-    Y = (N + h) * Decimal(math.cos(phi)) * Decimal(math.sin(lamb))
-    Z = ((1 - e**2) * N + h) * Decimal(math.sin(phi))
+    N = a / Decimal(math.sqrt(1 - (e**2 * sin_phi**2)))
+
+    X = (N + h) * cos_phi * cos_lamb
+    Y = (N + h) * cos_phi * sin_lamb
+    Z = ((1 - e**2) * N + h) * sin_phi
 
     return X, Y, Z

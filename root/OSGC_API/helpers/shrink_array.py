@@ -64,7 +64,7 @@ def nearest_neighbor(df, num_x_slice, num_y_slice):
     return sliced_df
 
 
-def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_distance, point=[0,0,0]):
+def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_distance, point):
     """
     Perform bilinear and linear interpolation on a given dataframe to shrink it to a specified size.
     Parameters:
@@ -145,9 +145,12 @@ def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_
             # Convert the point to ECEF coordinates
             point_ecef = latlon_to_ecef(point[0], point[1], point[2])
             # Apply the offset point using Decimal for precision
-            X = Decimal(point_ecef[0]) - Decimal(X)
-            Y = Decimal(point_ecef[1]) - Decimal(Y)
-            Z = Decimal(point_ecef[2]) - Decimal(Z)
+            # X = Decimal(point_ecef[0]) - Decimal(X)
+            # Y = Decimal(point_ecef[1]) - Decimal(Y)
+            # Z = Decimal(point_ecef[2]) - Decimal(Z)
+            X = Decimal(X) - Decimal(point_ecef[0])
+            Y = Decimal(Y) - Decimal(point_ecef[1])
+            Z = Decimal(Z) - Decimal(point_ecef[2])
             # Append the array [lat, long, elevation]
             temp_array.append([X, Y, Z])
 
@@ -173,9 +176,12 @@ def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_
         # Convert the point to ECEF coordinates
         point_ecef = latlon_to_ecef(point[0], point[1], point[2])
         # Apply the offset point using Decimal for precision
-        X = Decimal(point_ecef[0]) - Decimal(X)
-        Y = Decimal(point_ecef[1]) - Decimal(Y)
-        Z = Decimal(point_ecef[2]) - Decimal(Z)
+        # X = Decimal(point_ecef[0]) - Decimal(X)
+        # Y = Decimal(point_ecef[1]) - Decimal(Y)
+        # Z = Decimal(point_ecef[2]) - Decimal(Z)
+        X = Decimal(X) - Decimal(point_ecef[0])
+        Y = Decimal(Y) - Decimal(point_ecef[1])
+        Z = Decimal(Z) - Decimal(point_ecef[2])
         bottom_row.append([X, Y, Z])
 
     # Append the bottom row to the shrunken array
@@ -200,9 +206,12 @@ def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_
         # Convert the point to ECEF coordinates
         point_ecef = latlon_to_ecef(point[0], point[1], point[2])
         # Apply the offset point using Decimal for precision
-        X = Decimal(point_ecef[0]) - Decimal(X)
-        Y = Decimal(point_ecef[1]) - Decimal(Y)
-        Z = Decimal(point_ecef[2]) - Decimal(Z)
+        # X = Decimal(point_ecef[0]) - Decimal(X)
+        # Y = Decimal(point_ecef[1]) - Decimal(Y)
+        # Z = Decimal(point_ecef[2]) - Decimal(Z)
+        X = Decimal(X) - Decimal(point_ecef[0])
+        Y = Decimal(Y) - Decimal(point_ecef[1])
+        Z = Decimal(Z) - Decimal(point_ecef[2])
         # Append the array [lat, long, elevation]
         shrunken_array[x_counter].append([X, Y, Z])
 
@@ -215,9 +224,12 @@ def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_
     # Convert the point to ECEF coordinates
     point_ecef = latlon_to_ecef(point[0], point[1], point[2])
     # Apply the offset point using Decimal for precision
-    X = Decimal(point_ecef[0]) - Decimal(X)
-    Y = Decimal(point_ecef[1]) - Decimal(Y)
-    Z = Decimal(point_ecef[2]) - Decimal(Z)
+    # X = Decimal(point_ecef[0]) - Decimal(X)
+    # Y = Decimal(point_ecef[1]) - Decimal(Y)
+    # Z = Decimal(point_ecef[2]) - Decimal(Z)
+    X = Decimal(X) - Decimal(point_ecef[0])
+    Y = Decimal(Y) - Decimal(point_ecef[1])
+    Z = Decimal(Z) - Decimal(point_ecef[2])
     shrunken_array[-1].append([X, Y, Z])
 
     # Return the new dataframe with lat, long, and elevation
