@@ -1,0 +1,7 @@
+numpy
+flask
+pandas
+rasterio
+gdal
+matplotlib
+georasters

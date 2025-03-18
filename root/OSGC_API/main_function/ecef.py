@@ -7,12 +7,7 @@ from flask import abort
 # using decimal for the precision
 getcontext().prec = 30
 
-# these are for the grs80 ellipsoid
-a = Decimal('6378137.0')
-b = Decimal('6356752.314140347')
-flattening = Decimal('1') / Decimal('298.257222100882711243')
-
-e = Decimal(2 * flattening) - Decimal(flattening ** 2)
+# https://epsg.io/transform#s_srs=4326&t_srs=4978&x=39.9000000&y=-82.8800000
 
 def latlon_to_ecef(lat, lon, alt=0):
     """
@@ -29,6 +24,14 @@ def latlon_to_ecef(lat, lon, alt=0):
     Raises:
     TypeError: If there is a failure in converting the input data types.
     """
+
+    # these are for the grs80 ellipsoid
+    a = Decimal('6378137.0')
+    b = Decimal('6356752.314140347')
+    flattening = Decimal('1') / Decimal('298.257222100882711243')
+
+    e = Decimal(2 * flattening) - Decimal(flattening ** 2)
+
     try:
         phi = Decimal(math.radians(float(lat)))
         lamb = Decimal(math.radians(float(lon)))

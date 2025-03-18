@@ -1,7 +1,7 @@
 import numpy as np
 from decimal import Decimal
 import pandas as pd
-from helpers.ecef import latlon_to_ecef
+from main_function.ecef import latlon_to_ecef
 
 
 # convert to the local tangent plane
@@ -48,10 +48,10 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
     translation_matrix = np.array([x_vector, y_vector, z_vector])
 
     # dot producting the translation matrix with the data
-    data = data.applymap(lambda x: np.dot(translation_matrix, x))
+    data = data.map(lambda x: np.dot(translation_matrix, x))
 
     # Applying the offset to the X - Coordinate of each point
-    data = data.applymap(lambda x: np.array([x[0] - Decimal(offset), x[1], x[2]]))
+    data = data.map(lambda x: np.array([x[0] - Decimal(offset), x[1], x[2]]))
 
     # Return the data as a JSON string
     # return data.to_json(orient="values")

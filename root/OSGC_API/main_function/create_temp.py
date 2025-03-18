@@ -1,9 +1,9 @@
 import os
 import uuid
 import rasterio
+from osgeo import gdal
 from flask import abort
 
-from helpers.tiff_func import create_blank_tiff
 from config import holder_directory
 
 def create_temp_file():
@@ -22,7 +22,15 @@ def create_temp_file():
     """
     temp_file_name = f"{uuid.uuid4()}.tiff"
     full_temp_file_name = os.path.join(holder_directory, temp_file_name)
-    create_blank_tiff(full_temp_file_name)
+
+    # creating the blank tiff that will be overwritten
+    driver = gdal.GetDriverByName('GTiff')
+    # 1 is the Height, Width, and Number of Channels of this blank file
+    try:
+        driver.Create(full_temp_file_name, 1, 1, 1, gdal.GDT_Byte)
+    except:
+        abort(404, "Creation of Blank TIFF failed")
+
     try:
         with rasterio.open(full_temp_file_name) as img:
             print("Temporary file created successfully.")

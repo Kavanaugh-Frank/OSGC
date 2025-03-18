@@ -27,20 +27,3 @@ def df_to_tiff(df, output_tiff_path):
         band.WriteArray(array)
 
     dataset = None  # Close the dataset
-
-def create_blank_tiff(output_tiff_path):
-    """
-    Create a blank TIFF file at the specified path.
-
-    Parameters:
-    output_tiff_path (str): The file path where the blank TIFF file will be created.
-
-    Raises:
-    HTTPException: If the creation of the blank TIFF file fails, a 404 error is raised with a message.
-    """
-    driver = gdal.GetDriverByName('GTiff')
-    # 1 is the Height, Width, and Number of Channels of this blank file
-    try:
-        driver.Create(output_tiff_path, 1, 1, 1, gdal.GDT_Byte)
-    except:
-        abort(404, "Creation of Blank TIFF failed")
