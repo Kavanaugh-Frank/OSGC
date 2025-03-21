@@ -1,13 +1,27 @@
 import math
 import pandas as pd
-from main_function.ecef import latlon_to_ecef
+from main_function.ecef import latlon_to_ecef  # Ensure this import is correct and the function exists
 from decimal import Decimal
 
-def calculate_offset(point_ecef, X, Y, Z):
-    return Decimal(X) - Decimal(point_ecef[0]), Decimal(Y) - Decimal(point_ecef[1]), Decimal(Z) - Decimal(point_ecef[2])
-
-def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_distance, point):
+def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_difference, point):
+    """
+    Perform interpolation on a DataFrame to shrink its size and convert latitude and longitude to ECEF coordinates.
+    Args:
+        df (pd.DataFrame): The input DataFrame containing the data to be interpolated.
+        num_x_slice (int): The number of slices along the x-axis.
+        num_y_slice (int): The number of slices along the y-axis.
+        lat (float): The starting latitude.
+        long (float): The starting longitude.
+        lat_difference (float): The total difference in latitude to cover.
+        long_difference (float): The total difference in longitude to cover.
+        point (tuple): A tuple containing the reference point (latitude, longitude, altitude).
+    Returns:
+        pd.DataFrame: A DataFrame containing the interpolated and shrunken array with ECEF coordinates.
+    """
     x_resolution, y_resolution = df.shape
+
+    if x_resolution < 2 or y_resolution < 2:
+        raise ValueError("DataFrame must have at least two rows and columns for interpolation.")
 
     point_ecef = latlon_to_ecef(point[0], point[1], point[2])
     print(f"Point ECEF: {point_ecef}")
@@ -28,9 +42,11 @@ def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_
         y_indices_decimal.append(((i * y_percent_spacing) / 100) * (y_resolution - 1) % 1)
 
     lat_step = lat_difference / max(num_x_slice - 1, 1)
-    long_step = long_distance / max(num_y_slice - 1, 1)
+    long_step = long_difference / max(num_y_slice - 1, 1)
 
     shrunken_array = []
+    latlon_cache = {}
+    
     for x_counter in range(num_x_slice):
         temp_array = []
         for y_counter in range(num_y_slice):
@@ -40,9 +56,9 @@ def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_
             print(f"\nProcessing x_index: {x_index}, y_index: {y_index}")
 
             top_left_value = df.iat[x_index, y_index]
-            bottom_right_value = df.iat[x_index + 1, y_index + 1] if x_index < x_resolution - 1 and y_index < y_resolution - 1 else top_left_value
-            bottom_left_value = df.iat[x_index + 1, y_index] if x_index < x_resolution - 1 else top_left_value
-            top_right_value = df.iat[x_index, y_index + 1] if y_index < y_resolution - 1 else top_left_value
+            bottom_right_value = df.iat[min(x_index + 1, x_resolution - 1), min(y_index + 1, y_resolution - 1)]
+            bottom_left_value = df.iat[min(x_index + 1, x_resolution - 1), y_index]
+            top_right_value = df.iat[x_index, min(y_index + 1, y_resolution - 1)]
 
             # Print values for interpolation debugging
             print(f"Top Left: {top_left_value}, Top Right: {top_right_value}")
@@ -60,8 +76,10 @@ def interpolation(df, num_x_slice, num_y_slice, lat, long, lat_difference, long_
             current_lat = lat - (x_counter * lat_step)
             current_long = long + (y_counter * long_step)
 
-            X, Y, Z = latlon_to_ecef(current_lat, current_long, final_value)
-            X, Y, Z = calculate_offset(point_ecef, X, Y, Z)
+            if (current_lat, current_long, final_value) not in latlon_cache:
+                latlon_cache[(current_lat, current_long, final_value)] = latlon_to_ecef(current_lat, current_long, final_value)
+            X, Y, Z = latlon_cache[(current_lat, current_long, final_value)]
+            X, Y, Z = Decimal(X) - Decimal(point_ecef[0]), Decimal(Y) - Decimal(point_ecef[1]), Decimal(Z) - Decimal(point_ecef[2])
 
             # Print Z values for debugging
             print(f"Calculated Z: {Z}")

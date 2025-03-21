@@ -7,7 +7,8 @@ import math
 from main_function.lookup_file import look_up_file
 from config import volume_directory
 
-def process_files(num_files_needed, file, upper_lat, upper_long, lower_lat, lower_long, resolution_width, full_temp_file_name, full_merged_file_name):
+def process_files(num_files_needed, file, upper_lat, upper_long, lower_lat, lower_long, full_temp_file_name, full_merged_file_name):
+
     """
     Processes the given file(s) based on the number of files needed and the specified coordinates and resolution.
 
