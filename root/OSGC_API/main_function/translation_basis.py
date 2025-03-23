@@ -51,7 +51,7 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
     data = data.map(lambda x: np.dot(translation_matrix, x))
 
     # Applying the offset to the X - Coordinate of each point
-    data = data.map(lambda x: np.array([x[0] - Decimal(offset), x[1], x[2]]))
+    data = data.map(lambda x: np.array([round(Decimal(x[0]) - Decimal(offset), 5), round(Decimal(x[1]), 5), round(Decimal(x[2]), 5)]))
 
     # Return the data as a JSON string
     # return data.to_json(orient="values")
