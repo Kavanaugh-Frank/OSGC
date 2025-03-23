@@ -1,6 +1,6 @@
-import numpy as np
 from decimal import Decimal
-import pandas as pd
+
+import numpy as np
 from main_function.ecef import latlon_to_ecef
 
 
@@ -51,9 +51,14 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
     data = data.map(lambda x: np.dot(translation_matrix, x))
 
     # Applying the offset to the X - Coordinate of each point
-    data = data.map(lambda x: np.array([round(Decimal(x[0]) - Decimal(offset), 5), round(Decimal(x[1]), 5), round(Decimal(x[2]), 5)]))
+    data = data.map(
+        lambda x: [
+            round(Decimal(x[0]) - Decimal(offset), 5),
+            round(Decimal(x[1]), 5),
+            round(Decimal(x[2]), 5),
+        ]
+    )
 
     # Return the data as a JSON string
     # return data.to_json(orient="values")
     return data
-

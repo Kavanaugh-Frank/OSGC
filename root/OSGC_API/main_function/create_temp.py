@@ -6,6 +6,7 @@ from flask import abort
 
 from config import holder_directory
 
+
 def create_temp_file():
     """
     Creates a temporary TIFF file with a unique name in the specified directory.
@@ -18,13 +19,13 @@ def create_temp_file():
         tuple: A tuple containing the temporary file name and the full path to the temporary file.
 
     Raises:
-        HTTPException: If the temporary file cannot be opened, an HTTP 500 error is raised with the error message.
+        HTTPException: If the temporary file cannot be opened, an HTTP 500 error is raised.
     """
     temp_file_name = f"{uuid.uuid4()}.tiff"
     full_temp_file_name = os.path.join(holder_directory, temp_file_name)
 
     # creating the blank tiff that will be overwritten
-    driver = gdal.GetDriverByName('GTiff')
+    driver = gdal.GetDriverByName("GTiff")
     # 1 is the Height, Width, and Number of Channels of this blank file
     try:
         driver.Create(full_temp_file_name, 1, 1, 1, gdal.GDT_Byte)
@@ -36,4 +37,5 @@ def create_temp_file():
             print("Temporary file created successfully.")
     except Exception as e:
         abort(500, f"Failed to open temp file: {e}")
-    return temp_file_name, full_temp_file_name
+
+    return full_temp_file_name

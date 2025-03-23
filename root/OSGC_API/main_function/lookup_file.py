@@ -1,10 +1,11 @@
 import os
 
+
 def look_up_file(x, y, x_sign, y_sign, base_dir="/data"):
     """
     The function constructs a file name based on the latitude (`x`) and longitude (`y`) coordinates,
     including appropriate formatting for northern/southern and eastern/western hemispheres.
-    It then checks if the file exists at the specified `base_dir`. 
+    It then checks if the file exists at the specified `base_dir`.
     Args:
         x (int): The x-coordinate.
         y (int): The y-coordinate.
