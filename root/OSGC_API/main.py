@@ -1,9 +1,8 @@
-# import rasterio
 from flask import Flask, request, jsonify, abort
 from osgeo import gdal
 import os
-import rasterio
 import math
+import csv
 
 from main_function.lookup_file import look_up_file  # Looks up the file based on given coordinates
 from main_function.process_files import process_files  # Processes the files based on given parameters
@@ -167,6 +166,12 @@ def process_coordinates():
     for i in range(shrunk_json.shape[0]):
         for j in range(shrunk_json.shape[1]):
             flattened_data.append(shrunk_json.iloc[i, j].tolist())
+
+    with open("elevation.csv", "w", newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([upper_lat, upper_long, lower_lat, lower_long])
+        for row in flattened_data:
+            writer.writerow(row)
 
     return jsonify(flattened_data)
 
