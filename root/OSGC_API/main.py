@@ -19,8 +19,11 @@ from main_function.process_files import process_files
 # Does the interpolation of the data into the smaller datasets
 from main_function.shrink_array import interpolation
 
-# Makes the 3 vectors needed for the translation matrix
+# Makes the 3 vectors needed for the translation matrix, and puts each point through that basis
 from main_function.translation_basis import translation_basis
+
+# Finds the height at the point that represents the GS in the DF before it is shrunken
+from main_function.gs_height import get_gs_height
 from osgeo import gdal
 
 gdal.DontUseExceptions()
@@ -116,12 +119,14 @@ def process_coordinates():
     lat_diff = abs(upper_lat_ceil - lower_lat_ceil)
     long_diff = abs(upper_long_ceil - lower_long_ceil)
 
-    num_files_needed = 1
+    num_files_needed = 0
 
     if (lat_diff == 1 and long_diff == 0) or (lat_diff == 0 and long_diff == 1):
         num_files_needed = 2
     elif lat_diff == 1 and long_diff == 1:
         num_files_needed = 4
+    elif lat_diff == 0 and long_diff == 0:
+        num_files_needed = 1
     else:
         abort(404, "Invalid latitude or longitude difference for file calculation")
 
@@ -138,13 +143,29 @@ def process_coordinates():
 
     # preprocessing
     # this replaces the 'invalid" number with the last correct one in the row
-    df.replace(-999999.0, method="ffill", inplace=True)
+    # have to do this first so the fillna goes for NaN and since -999999 is technically a number
+    # we need to replace it first
+    df.replace(-999999.0, None, inplace=True)
+    df.fillna("ffill", inplace=True)
 
     print("Data Frame Shape before Interpolation ", df.shape)
 
     # ds = gdal.Open(file)
     # print(f"Raster CRS: {ds.GetProjection()}")
     # print(f"Raster Extent (ULX, ULY, LRX, LRY): {ds.GetGeoTransform()}")
+
+
+    # the height of the elevation needs to be based off the height of the glideslope
+    # the height of the GS in the request should be the height of it off the ground
+    # so take the height of the GS at some point + the GS height given
+    # and then subtract that from the height at each point
+    # the GS can not be underground, assume the height is how far off the ground it is
+    # Calculate the average of the valid points
+    try:
+        gs_point = get_gs_height(upper_lat, upper_long, lower_lat, lower_long, df, gs_lat, gs_long)
+    except Exception as e:
+        abort(404, f"Problem {e} finding the GS height")
+    gs_height += gs_point
 
     try:
         shrunk_data = interpolation(
@@ -168,6 +189,7 @@ def process_coordinates():
             f"lower_lat={lower_lat}, lower_long={lower_long}, "
             f"gs_lat={gs_lat}, gs_long={gs_long}, gs_height={gs_height}",
         )
+
     try:
         shrunk_json = translation_basis(shrunk_data, offset, gs_lat, gs_long, gs_height)
     except Exception as e:
@@ -180,9 +202,7 @@ def process_coordinates():
         except FileNotFoundError:
             print(f"{temp_file} not found. Skipping removal.")
         except PermissionError:
-            print(
-                f"Permission denied when trying to remove {temp_file}. Skipping removal."
-            )
+            print(f"Permission denied when trying to remove {temp_file}. Skipping removal.")
         except Exception as e:
             print(f"Error removing {temp_file}: {e}")
 
@@ -190,11 +210,15 @@ def process_coordinates():
     # to match the format of the data table in OUGS
     flattened_data = shrunk_json.values.flatten().tolist()
 
-    with open("elevation.csv", "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow([upper_lat, upper_long, lower_lat, lower_long])
+
+    # creating a copy of the elevation.3D
+    with open("elevation.3D", "w", encoding="utf-8") as f:
+        # Write the first row with its specific delimiter
+        f.write(f"  {num_y_slice}           {num_x_slice}\n")
+
+        # Write the rest of the rows with a different delimiter
         for row in flattened_data:
-            writer.writerow(row)
+            f.write(f" {row[0]} {row[1]} {row[2]}\n")
 
     return jsonify(flattened_data)
 

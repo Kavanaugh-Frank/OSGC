@@ -35,7 +35,7 @@ def latlon_to_ecef(lat, lon, alt=0):
     try:
         phi = Decimal(math.radians(float(lat)))
         lamb = Decimal(math.radians(float(lon)))
-        h = Decimal(float(alt))
+        h = Decimal(float(alt)) * Decimal(0.3048)
     except TypeError:
         abort(404, f"failed conversion of data types in ECEF conversion")
 

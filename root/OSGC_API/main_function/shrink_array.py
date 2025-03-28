@@ -32,7 +32,7 @@ def interpolation(
         )
 
     point_ecef = latlon_to_ecef(point[0], point[1], point[2])
-    print(f"Point ECEF: {point_ecef}")
+    # print(f"Point ECEF: {point_ecef}")
 
     x_percent_spacing = 100 / max(num_x_slice - 1, 1)
     y_percent_spacing = 100 / max(num_y_slice - 1, 1)
@@ -63,7 +63,6 @@ def interpolation(
     long_step = long_difference / max(num_y_slice - 1, 1)
 
     shrunken_array = []
-    latlon_cache = {}
 
     for x_counter in range(num_x_slice):
         temp_array = []
@@ -71,7 +70,7 @@ def interpolation(
             x_index, y_index = x_indices[x_counter], y_indices[y_counter]
 
             # Debugging index and data values
-            print(f"\nProcessing x_index: {x_index}, y_index: {y_index}")
+            # print(f"\nProcessing x_index: {x_index}, y_index: {y_index}")
 
             top_left_value = df.iat[x_index, y_index]
             bottom_right_value = df.iat[
@@ -81,10 +80,10 @@ def interpolation(
             top_right_value = df.iat[x_index, min(y_index + 1, y_resolution - 1)]
 
             # Print values for interpolation debugging
-            print(f"Top Left: {top_left_value}, Top Right: {top_right_value}")
-            print(
-                f"Bottom Left: {bottom_left_value}, Bottom Right: {bottom_right_value}"
-            )
+            # print(f"Top Left: {top_left_value}, Top Right: {top_right_value}")
+            # print(
+            #     f"Bottom Left: {bottom_left_value}, Bottom Right: {bottom_right_value}"
+            # )
 
             x_distance, y_distance = (
                 x_indices_decimal[x_counter],
@@ -101,11 +100,7 @@ def interpolation(
             current_lat = lat - (x_counter * lat_step)
             current_long = long + (y_counter * long_step)
 
-            if (current_lat, current_long, final_value) not in latlon_cache:
-                latlon_cache[(current_lat, current_long, final_value)] = latlon_to_ecef(
-                    current_lat, current_long, final_value
-                )
-            X, Y, Z = latlon_cache[(current_lat, current_long, final_value)]
+            X, Y, Z = latlon_to_ecef(current_lat, current_long, final_value)
             X, Y, Z = (
                 Decimal(X) - Decimal(point_ecef[0]),
                 Decimal(Y) - Decimal(point_ecef[1]),
@@ -113,7 +108,7 @@ def interpolation(
             )
 
             # Print Z values for debugging
-            print(f"Calculated Z: {Z}")
+            # print(f"Calculated Z: {Z}")
 
             temp_array.append([X, Y, Z])
         shrunken_array.append(temp_array)
