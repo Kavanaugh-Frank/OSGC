@@ -1,6 +1,6 @@
-import csv
 import math
 import os
+import logging
 
 # Configuration for volume directory
 from config import volume_directory
@@ -28,40 +28,25 @@ from osgeo import gdal
 
 gdal.DontUseExceptions()
 
+logging.basicConfig(
+    level=logging.INFO,  # Set the logging level to INFO
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler("app.log"),
+        logging.StreamHandler()
+    ]
+)
+
+# Suppress logs from external libraries
+logging.getLogger("werkzeug").setLevel(logging.ERROR)
+logging.getLogger("osgeo").setLevel(logging.ERROR)
+
 app = Flask(__name__)
 
 
 @app.route("/process_coordinates", methods=["POST"])
 def process_coordinates():
-    """
-    Processes geographical coordinates and performs various operations including validation, file lookup,
-    data processing, interpolation, and translation.
-    The function expects a JSON payload with the following keys:
-    - num_x_slice: Number of slices along the x-axis (integer, positive)
-    - num_y_slice: Number of slices along the y-axis (integer, positive)
-    - upper_lat: Upper latitude boundary (float, between -90 and 90)
-    - lower_lat: Lower latitude boundary (float, between -90 and 90)
-    - upper_long: Upper longitude boundary (float, between -180 and 180)
-    - lower_long: Lower longitude boundary (float, between -180 and 180)
-    - gs_lat: Latitude of the glide slope (float)
-    - gs_long: Longitude of the glide slope (float)
-    - gs_height: Height of the glide slope (float, non-negative)
-    - offset: Offset value for translation (float)
-    The function performs the following steps:
-    1. Validates the input data.
-    2. Checks if the latitude and longitude values are within valid ranges.
-    3. Ensures that the upper latitude/longitude is greater than or equal to the lower latitude/longitude.
-    4. Looks up the required file based on the provided coordinates.
-    5. Processes the files and performs interpolation.
-    6. Translates the interpolated data based on the glide slope.
-    7. Removes any temporary files created during processing.
-    8. Converts the processed data into a flattened 1D array for JSON response.
-    Returns:
-        JSON response containing the flattened 1D array of processed data.
-    Raises:
-        400: If the input data is invalid or if any validation checks fail.
-        404: If the required file is not found or if interpolation fails.
-    """
+    logging.info("Received a request to /process_coordinates")
     data = request.json
 
     try:
@@ -73,27 +58,36 @@ def process_coordinates():
         lower_long = float(data.get("lower_long"))
         gs_lat = float(data.get("gs_lat"))
         gs_long = float(data.get("gs_long"))
-        gs_height = float(data.get("gs_height"))
-        offset = float(data.get("offset"))
+        gs_height = float(data.get("gs_height"))  # meter
+        offset = float(data.get("offset"))  # meter
+
+        logging.info(f"Request parameters: {data}")
     except (TypeError, ValueError) as e:
+        logging.error(f"Invalid input data: {e}")
         abort(400, f"Invalid input data: {e}")
 
     if num_x_slice <= 0 and num_y_slice <= 0:
+        logging.error("num_x_slice and num_y_slice must be positive integers")
         abort(400, "num_x_slice and num_y_slice must be positive integers")
 
     if not -90 <= upper_lat <= 90 and -90 <= lower_lat <= 90:
+        logging.error("Latitude values must be between -90 and 90 degrees")
         abort(400, "Latitude values must be between -90 and 90 degrees")
 
     if not -180 <= upper_long <= 180 and -180 <= lower_long <= 180:
+        logging.error("Longitude values must be between -180 and 180 degrees")
         abort(400, "Longitude values must be between -180 and 180 degrees")
 
     if not abs(upper_lat) >= abs(lower_lat):
+        logging.error("upper_lat must be greater than or equal to lower_lat")
         abort(400, "upper_lat must be greater than or equal to lower_lat")
 
     if not abs(upper_long) >= abs(lower_long):
+        logging.error("upper_long must be greater than or equal to lower_long")
         abort(400, "upper_long must be greater than or equal to lower_long")
 
     if gs_height < 0:
+        logging.error("gs_height must be a non-negative value")
         abort(400, "gs_height must be a non-negative value")
 
     upper_lat_ceil = math.ceil(abs(upper_lat))
@@ -101,6 +95,7 @@ def process_coordinates():
     upper_long_ceil = math.ceil(abs(upper_long))
     lower_long_ceil = math.ceil(abs(lower_long))
 
+    logging.info(f"Looking up file based on coordinates: upper_lat={upper_lat}, upper_long={upper_long}, lower_lat={lower_lat}, lower_long={lower_long}")
     file = look_up_file(
         upper_lat_ceil,
         upper_long_ceil,
@@ -110,12 +105,12 @@ def process_coordinates():
     )
 
     if file is None:
+        logging.error("File not found")
         abort(404, "File not found")
 
     full_temp_file_name = create_temp_file()
     full_merged_file_name = create_temp_file()
 
-    # calculating the number of files needed
     lat_diff = abs(upper_lat_ceil - lower_lat_ceil)
     long_diff = abs(upper_long_ceil - lower_long_ceil)
 
@@ -128,8 +123,10 @@ def process_coordinates():
     elif lat_diff == 0 and long_diff == 0:
         num_files_needed = 1
     else:
+        logging.error("Invalid latitude or longitude difference for file calculation")
         abort(404, "Invalid latitude or longitude difference for file calculation")
 
+    logging.info(f"Processing {num_files_needed} files")
     df = process_files(
         num_files_needed,
         file,
@@ -141,31 +138,26 @@ def process_coordinates():
         full_merged_file_name,
     )
 
-    # preprocessing
-    # this replaces the 'invalid" number with the last correct one in the row
-    # have to do this first so the fillna goes for NaN and since -999999 is technically a number
-    # we need to replace it first
+    count_invalid = (df == -999999.0).sum().sum()
+    logging.info(f"Number of -999999 values before replacement: {count_invalid}")
     df.replace(-999999.0, None, inplace=True)
     df.fillna("ffill", inplace=True)
 
-    print("Data Frame Shape before Interpolation ", df.shape)
+    df = df.astype(float)
+    max_value = df.max().max()
+    min_value = df.min().min()
+    logging.info(f"Highest value in the DataFrame: {max_value}")
+    logging.info(f"Lowest value in the DataFrame: {min_value}")
+    logging.info(f"Data Frame Shape before Interpolation: {df.shape}")
 
-    # ds = gdal.Open(file)
-    # print(f"Raster CRS: {ds.GetProjection()}")
-    # print(f"Raster Extent (ULX, ULY, LRX, LRY): {ds.GetGeoTransform()}")
-
-
-    # the height of the elevation needs to be based off the height of the glideslope
-    # the height of the GS in the request should be the height of it off the ground
-    # so take the height of the GS at some point + the GS height given
-    # and then subtract that from the height at each point
-    # the GS can not be underground, assume the height is how far off the ground it is
-    # Calculate the average of the valid points
     try:
         gs_point = get_gs_height(upper_lat, upper_long, lower_lat, lower_long, df, gs_lat, gs_long)
+        logging.info(f"Height of the elevation where the GS is located {gs_point}")
     except Exception as e:
+        logging.error(f"Problem finding the GS height: {e}")
         abort(404, f"Problem {e} finding the GS height")
-    gs_height += gs_point
+
+    gs_height = gs_height + gs_point
 
     try:
         shrunk_data = interpolation(
@@ -178,48 +170,35 @@ def process_coordinates():
             abs(upper_long - lower_long),
             [gs_lat, gs_long, gs_height],
         )
-        shape = shrunk_data.shape
-        print("Data Frame Shape after Interpolation ", shape)
+        logging.info(f"Data Frame Shape after Interpolation: {shrunk_data.shape}")
     except Exception as e:
-        abort(
-            404,
-            f"Interpolation failed with error: {e}. Parameters: "
-            f"num_x_slice={num_x_slice}, num_y_slice={num_y_slice}, "
-            f"upper_lat={upper_lat}, upper_long={upper_long}, "
-            f"lower_lat={lower_lat}, lower_long={lower_long}, "
-            f"gs_lat={gs_lat}, gs_long={gs_long}, gs_height={gs_height}",
-        )
+        logging.error(f"Interpolation failed: {e}")
+        abort(404, f"Interpolation failed with error: {e}")
 
     try:
         shrunk_json = translation_basis(shrunk_data, offset, gs_lat, gs_long, gs_height)
     except Exception as e:
+        logging.error(f"Translation basis failed: {e}")
         abort(404, f"Translation basis failed: {e}")
 
-    # removing any of the temporary files that were created
     for temp_file in [full_temp_file_name, full_merged_file_name]:
         try:
             os.remove(temp_file)
         except FileNotFoundError:
-            print(f"{temp_file} not found. Skipping removal.")
+            logging.warning(f"{temp_file} not found. Skipping removal.")
         except PermissionError:
-            print(f"Permission denied when trying to remove {temp_file}. Skipping removal.")
+            logging.warning(f"Permission denied when trying to remove {temp_file}. Skipping removal.")
         except Exception as e:
-            print(f"Error removing {temp_file}: {e}")
+            logging.error(f"Error removing {temp_file}: {e}")
 
-    # converting the 2D array to a single 1D array, while keeping the order
-    # to match the format of the data table in OUGS
     flattened_data = shrunk_json.values.flatten().tolist()
 
-
-    # creating a copy of the elevation.3D
     with open("elevation.3D", "w", encoding="utf-8") as f:
-        # Write the first row with its specific delimiter
         f.write(f"  {num_y_slice}           {num_x_slice}\n")
-
-        # Write the rest of the rows with a different delimiter
         for row in flattened_data:
             f.write(f" {row[0]} {row[1]} {row[2]}\n")
 
+    logging.info("Request processed successfully")
     return jsonify(flattened_data)
 
 

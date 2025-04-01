@@ -1,0 +1,207 @@
+2025-03-31 00:12:40,913 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.160:8080
+2025-03-31 00:12:40,913 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-31 00:12:40,914 - INFO -  * Restarting with stat
+2025-03-31 00:12:41,384 - WARNING -  * Debugger is active!
+2025-03-31 00:12:41,389 - INFO -  * Debugger PIN: 568-504-099
+2025-03-31 00:12:45,689 - INFO - 127.0.0.1 - - [31/Mar/2025 00:12:45] "POST /process_coordinates HTTP/1.1" 200 -
+2025-03-31 00:12:52,320 - INFO - 127.0.0.1 - - [31/Mar/2025 00:12:52] "POST /process_coordinates HTTP/1.1" 200 -
+2025-03-31 00:13:39,305 - INFO -  * Detected change in '/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/main.py', reloading
+2025-03-31 00:13:39,375 - INFO -  * Restarting with stat
+2025-03-31 00:13:41,996 - INFO - Received a request to /process_coordinates
+2025-03-31 00:13:41,996 - INFO - Looking up file based on coordinates
+2025-03-31 00:13:42,001 - INFO - Processing 1 files
+2025-03-31 00:13:42,043 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 00:13:42,044 - INFO - Highest value in the DataFrame: 212.5397491455078
+2025-03-31 00:13:42,044 - INFO - Lowest value in the DataFrame: 207.93971252441406
+2025-03-31 00:13:42,044 - INFO - Data Frame Shape before Interpolation: (108, 108)
+2025-03-31 00:13:42,051 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 00:13:42,057 - INFO - Request processed successfully
+2025-03-31 00:18:25,682 - INFO -  * Restarting with stat
+2025-03-31 00:18:30,966 - __main__ - INFO - main.py:65 - Received process_coordinates request
+2025-03-31 00:18:30,966 - __main__ - ERROR - main.py:119 - Longitude ordering invalid: upper_long=-83.755 < lower_long=-83.745
+2025-03-31 00:18:30,969 - __main__ - CRITICAL - main.py:271 - Unhandled exception in processing
+Traceback (most recent call last):
+  File "/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/main.py", line 121, in process_coordinates
+    abort(400, "upper_long must be greater than or equal to lower_long")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/flask/helpers.py", line 284, in abort
+    current_app.aborter(code, *args, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/werkzeug/exceptions.py", line 876, in __call__
+    raise self.mapping[code](*args, **kwargs)
+werkzeug.exceptions.BadRequest: 400 Bad Request: upper_long must be greater than or equal to lower_long
+2025-03-31 00:19:18,534 - __main__ - INFO - main.py:65 - Received process_coordinates request
+2025-03-31 00:19:18,535 - __main__ - ERROR - main.py:119 - Longitude ordering invalid: upper_long=-83.755 < lower_long=-83.745
+2025-03-31 00:19:18,536 - __main__ - CRITICAL - main.py:271 - Unhandled exception in processing
+Traceback (most recent call last):
+  File "/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/main.py", line 121, in process_coordinates
+    abort(400, "upper_long must be greater than or equal to lower_long")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/flask/helpers.py", line 284, in abort
+    current_app.aborter(code, *args, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/werkzeug/exceptions.py", line 876, in __call__
+    raise self.mapping[code](*args, **kwargs)
+werkzeug.exceptions.BadRequest: 400 Bad Request: upper_long must be greater than or equal to lower_long
+2025-03-31 00:19:50,481 - __main__ - INFO - main.py:65 - Received process_coordinates request
+2025-03-31 00:19:50,482 - __main__ - ERROR - main.py:119 - Longitude ordering invalid: upper_long=-83.755 < lower_long=-83.745
+2025-03-31 00:19:50,483 - __main__ - CRITICAL - main.py:271 - Unhandled exception in processing
+Traceback (most recent call last):
+  File "/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/main.py", line 121, in process_coordinates
+    abort(400, "upper_long must be greater than or equal to lower_long")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/flask/helpers.py", line 284, in abort
+    current_app.aborter(code, *args, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/werkzeug/exceptions.py", line 876, in __call__
+    raise self.mapping[code](*args, **kwargs)
+werkzeug.exceptions.BadRequest: 400 Bad Request: upper_long must be greater than or equal to lower_long
+2025-03-31 00:19:51,856 - __main__ - INFO - main.py:65 - Received process_coordinates request
+2025-03-31 00:19:51,857 - __main__ - ERROR - main.py:119 - Longitude ordering invalid: upper_long=-83.755 < lower_long=-83.745
+2025-03-31 00:19:51,857 - __main__ - CRITICAL - main.py:271 - Unhandled exception in processing
+Traceback (most recent call last):
+  File "/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/main.py", line 121, in process_coordinates
+    abort(400, "upper_long must be greater than or equal to lower_long")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/flask/helpers.py", line 284, in abort
+    current_app.aborter(code, *args, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/werkzeug/exceptions.py", line 876, in __call__
+    raise self.mapping[code](*args, **kwargs)
+werkzeug.exceptions.BadRequest: 400 Bad Request: upper_long must be greater than or equal to lower_long
+2025-03-31 00:20:44,261 - __main__ - INFO - main.py:65 - Received process_coordinates request
+2025-03-31 00:20:44,262 - __main__ - ERROR - main.py:119 - Longitude ordering invalid: upper_long=-83.755 < lower_long=-83.745
+2025-03-31 00:20:44,263 - __main__ - CRITICAL - main.py:271 - Unhandled exception in processing
+Traceback (most recent call last):
+  File "/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/main.py", line 121, in process_coordinates
+    # Calculate file lookup parameters
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/flask/helpers.py", line 284, in abort
+    current_app.aborter(code, *args, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/werkzeug/exceptions.py", line 876, in __call__
+    raise self.mapping[code](*args, **kwargs)
+werkzeug.exceptions.BadRequest: 400 Bad Request: upper_long must be greater than or equal to lower_long
+2025-03-31 00:21:02,746 - __main__ - INFO - main.py:65 - Received process_coordinates request
+2025-03-31 00:21:02,746 - __main__ - ERROR - main.py:119 - Longitude ordering invalid: upper_long=-83.755 < lower_long=-83.745
+2025-03-31 00:21:02,747 - __main__ - CRITICAL - main.py:271 - Unhandled exception in processing
+Traceback (most recent call last):
+  File "/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/main.py", line 121, in process_coordinates
+    elif lat_diff == 0 and long_diff == 0:
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/flask/helpers.py", line 284, in abort
+    current_app.aborter(code, *args, **kwargs)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kavanaughfrank/Desktop/OSGC/.venv/lib/python3.13/site-packages/werkzeug/exceptions.py", line 876, in __call__
+    raise self.mapping[code](*args, **kwargs)
+werkzeug.exceptions.BadRequest: 400 Bad Request: upper_long must be greater than or equal to lower_long
+2025-03-31 00:21:23,952 - INFO - Received a request to /process_coordinates
+2025-03-31 00:21:23,953 - INFO - Looking up file based on coordinates
+2025-03-31 00:21:23,959 - INFO - Processing 1 files
+2025-03-31 00:21:24,013 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 00:21:24,014 - INFO - Highest value in the DataFrame: 212.5397491455078
+2025-03-31 00:21:24,014 - INFO - Lowest value in the DataFrame: 207.93971252441406
+2025-03-31 00:21:24,014 - INFO - Data Frame Shape before Interpolation: (108, 108)
+2025-03-31 00:21:24,021 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 00:21:24,026 - INFO - Request processed successfully
+2025-03-31 00:22:57,225 - INFO - Received a request to /process_coordinates
+2025-03-31 00:22:57,226 - INFO - Request parameters: num_x_slice=20, num_y_slice=10, upper_lat=41.255, lower_lat=41.245, upper_long=-83.755, lower_long=-83.745, gs_lat=41.25, gs_long=-83.75, gs_height=0.0, offset=200.0
+2025-03-31 00:22:57,226 - INFO - Looking up file based on coordinates: upper_lat=41.255, upper_long=-83.755, lower_lat=41.245, lower_long=-83.745
+2025-03-31 00:22:57,233 - INFO - Processing 1 files
+2025-03-31 00:22:57,280 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 00:22:57,281 - INFO - Highest value in the DataFrame: 212.5397491455078
+2025-03-31 00:22:57,281 - INFO - Lowest value in the DataFrame: 207.93971252441406
+2025-03-31 00:22:57,281 - INFO - Data Frame Shape before Interpolation: (108, 108)
+2025-03-31 00:22:57,288 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 00:22:57,294 - INFO - Request processed successfully
+2025-03-31 00:23:15,142 - INFO - Received a request to /process_coordinates
+2025-03-31 00:23:15,142 - INFO - Request parameters: {'upper_lat': 41.255, 'lower_lat': 41.245, 'upper_long': -83.755, 'lower_long': -83.745, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 41.25, 'gs_long': -83.75, 'gs_height': 0, 'offset': 200}
+2025-03-31 00:23:15,142 - INFO - Looking up file based on coordinates: upper_lat=41.255, upper_long=-83.755, lower_lat=41.245, lower_long=-83.745
+2025-03-31 00:23:15,146 - INFO - Processing 1 files
+2025-03-31 00:23:15,187 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 00:23:15,188 - INFO - Highest value in the DataFrame: 212.5397491455078
+2025-03-31 00:23:15,188 - INFO - Lowest value in the DataFrame: 207.93971252441406
+2025-03-31 00:23:15,188 - INFO - Data Frame Shape before Interpolation: (108, 108)
+2025-03-31 00:23:15,195 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 00:23:15,201 - INFO - Request processed successfully
+2025-03-31 11:52:50,506 - INFO - Received a request to /process_coordinates
+2025-03-31 11:52:50,507 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.208946, 'gs_long': -82.236184, 'gs_height': 0, 'offset': 200}
+2025-03-31 11:52:50,507 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-03-31 11:52:50,531 - INFO - Processing 1 files
+2025-03-31 11:52:50,602 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 11:52:50,603 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-03-31 11:52:50,603 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-03-31 11:52:50,603 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-03-31 11:52:50,613 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 11:52:50,619 - INFO - Request processed successfully
+2025-03-31 11:57:36,300 - INFO - Received a request to /process_coordinates
+2025-03-31 11:57:36,300 - INFO - Request parameters: {'upper_lat': 40.005092, 'lower_lat': 39.990179, 'upper_long': -82.909233, 'lower_long': -82.87346, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.997452, 'gs_long': -82.878063, 'gs_height': 0, 'offset': 200}
+2025-03-31 11:57:36,300 - INFO - Looking up file based on coordinates: upper_lat=40.005092, upper_long=-82.909233, lower_lat=39.990179, lower_long=-82.87346
+2025-03-31 11:57:36,302 - INFO - Processing 2 files
+2025-03-31 11:57:48,064 - INFO - Number of -999999 values before replacement: 38600
+2025-03-31 11:58:56,595 - INFO - Received a request to /process_coordinates
+2025-03-31 11:58:56,596 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.208946, 'gs_long': -82.236184, 'gs_height': 0, 'offset': 200}
+2025-03-31 11:58:56,596 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-03-31 11:58:56,602 - INFO - Processing 1 files
+2025-03-31 11:58:56,661 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 11:58:56,663 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-03-31 11:58:56,663 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-03-31 11:58:56,663 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-03-31 11:58:56,672 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 11:58:56,679 - INFO - Request processed successfully
+2025-03-31 11:59:36,136 - INFO - Received a request to /process_coordinates
+2025-03-31 11:59:36,136 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.208221, 'gs_long': -82.237686, 'gs_height': 0, 'offset': 200}
+2025-03-31 11:59:36,136 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-03-31 11:59:36,138 - INFO - Processing 1 files
+2025-03-31 11:59:36,168 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 11:59:36,169 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-03-31 11:59:36,169 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-03-31 11:59:36,169 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-03-31 11:59:36,178 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 11:59:36,182 - INFO - Request processed successfully
+2025-03-31 12:01:04,478 - INFO - Received a request to /process_coordinates
+2025-03-31 12:01:04,479 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.208221, 'gs_long': -82.237686, 'gs_height': 0, 'offset': 200}
+2025-03-31 12:01:04,479 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-03-31 12:01:04,485 - INFO - Processing 1 files
+2025-03-31 12:01:04,534 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 12:01:04,535 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-03-31 12:01:04,535 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-03-31 12:01:04,535 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-03-31 12:01:04,535 - INFO - Height of the elevation where the GS is located 245.29663696289063
+2025-03-31 12:01:04,544 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 12:01:04,551 - INFO - Request processed successfully
+2025-03-31 12:01:52,135 - INFO - Received a request to /process_coordinates
+2025-03-31 12:01:52,136 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200}
+2025-03-31 12:01:52,136 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-03-31 12:01:52,138 - INFO - Processing 1 files
+2025-03-31 12:01:52,166 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 12:01:52,166 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-03-31 12:01:52,166 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-03-31 12:01:52,166 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-03-31 12:01:52,167 - INFO - Height of the elevation where the GS is located 232.18502502441407
+2025-03-31 12:01:52,175 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 12:01:52,179 - INFO - Request processed successfully
+2025-03-31 13:46:53,952 - INFO - Received a request to /process_coordinates
+2025-03-31 13:46:53,954 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200}
+2025-03-31 13:46:53,954 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-03-31 13:46:53,991 - INFO - Processing 1 files
+2025-03-31 13:46:54,068 - INFO - Number of -999999 values before replacement: 0
+2025-03-31 13:46:54,070 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-03-31 13:46:54,070 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-03-31 13:46:54,070 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-03-31 13:46:54,071 - INFO - Height of the elevation where the GS is located 232.18502502441407
+2025-03-31 13:46:54,080 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-03-31 13:46:54,088 - INFO - Request processed successfully
+2025-04-01 19:07:12,428 - INFO - Received a request to /process_coordinates
+2025-04-01 19:07:12,429 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200}
+2025-04-01 19:07:12,429 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-01 19:07:12,467 - INFO - Processing 1 files
+2025-04-01 19:07:12,548 - INFO - Number of -999999 values before replacement: 0
+2025-04-01 19:07:12,550 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-01 19:07:12,550 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-01 19:07:12,550 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-01 19:07:12,550 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-01 19:07:12,560 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-01 19:07:12,568 - INFO - Request processed successfully

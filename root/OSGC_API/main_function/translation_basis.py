@@ -23,14 +23,14 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
     Returns:
         str: The transformed data as a JSON string with orientation "values".
     """
-    # finding Glide Slope (GS) in ECEF coordinates
+    # Finding Glide Slope (GS) in Earth-Centered, Earth-Fixed (ECEF) coordinates
     gs_x, gs_y, gs_z = latlon_to_ecef(gs_lat, gs_lon, gs_alt)
 
-    # creating the Z-vector, which is GS - Origin, and normalizing it
+    # Creating the Z-vector, which is GS - Origin, and normalizing it
     z_vector = np.array([gs_x, gs_y, gs_z])
     z_vector /= np.linalg.norm(z_vector)
 
-    # creating the vector that represents the north pole, for finding the x vector
+    # Creating the vector that represents the North Pole, for finding the X-vector
     north_x, north_y, north_z = latlon_to_ecef(90, 0, 0)
 
     # this vector is the North Pole - GS, and normalizing it
@@ -47,7 +47,7 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
     # construct the translation matrix
     translation_matrix = np.array([x_vector, y_vector, z_vector])
 
-    # dot producting the translation matrix with the data
+    # Applying the dot product of the translation matrix with the data
     data = data.map(lambda x: np.dot(translation_matrix, x))
 
     # Applying the offset to the X - Coordinate of each point
@@ -59,6 +59,4 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
         ]
     )
 
-    # Return the data as a JSON string
-    # return data.to_json(orient="values")
     return data
