@@ -1,0 +1,4 @@
+2025-04-14 20:01:26,327 - INFO - Received a request to /process_coordinates
+2025-04-14 20:01:26,328 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': 70}
+2025-04-14 20:01:26,328 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-14 20:01:26,328 - ERROR - File not found
