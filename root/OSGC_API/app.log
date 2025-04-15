@@ -205,3 +205,145 @@ werkzeug.exceptions.BadRequest: 400 Bad Request: upper_long must be greater than
 2025-04-01 19:07:12,550 - INFO - Height of the elevation where the GS is located 232.19072341396168
 2025-04-01 19:07:12,560 - INFO - Data Frame Shape after Interpolation: (20, 10)
 2025-04-01 19:07:12,568 - INFO - Request processed successfully
+2025-04-09 09:47:36,753 - INFO - Received a request to /process_coordinates
+2025-04-09 09:47:36,754 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200}
+2025-04-09 09:47:36,754 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-09 09:47:36,763 - INFO - Processing 1 files
+2025-04-09 09:47:36,825 - INFO - Number of -999999 values before replacement: 0
+2025-04-09 09:47:36,827 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-09 09:47:36,827 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-09 09:47:36,827 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-09 09:47:36,827 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-09 09:47:36,836 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-09 09:47:36,843 - INFO - Request processed successfully
+2025-04-13 22:09:26,921 - INFO - Received a request to /process_coordinates
+2025-04-13 22:09:26,921 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200}
+2025-04-13 22:09:26,921 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-13 22:09:26,951 - INFO - Processing 1 files
+2025-04-13 22:09:27,015 - INFO - Number of -999999 values before replacement: 0
+2025-04-13 22:09:27,017 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-13 22:09:27,017 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-13 22:09:27,017 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-13 22:09:27,017 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-13 22:09:27,025 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-13 22:09:27,028 - ERROR - Translation basis failed: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+2025-04-13 22:10:14,401 - INFO - Received a request to /process_coordinates
+2025-04-13 22:10:14,402 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200}
+2025-04-13 22:10:14,402 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-13 22:10:14,406 - INFO - Processing 1 files
+2025-04-13 22:10:14,453 - INFO - Number of -999999 values before replacement: 0
+2025-04-13 22:10:14,454 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-13 22:10:14,455 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-13 22:10:14,455 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-13 22:10:14,455 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-13 22:10:14,462 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-13 22:10:14,469 - INFO - Request processed successfully
+2025-04-13 22:13:20,421 - INFO - Received a request to /process_coordinates
+2025-04-13 22:13:20,421 - ERROR - Invalid input data: float() argument must be a string or a real number, not 'NoneType'
+2025-04-13 22:13:33,406 - INFO - Received a request to /process_coordinates
+2025-04-13 22:13:33,406 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': 20}
+2025-04-13 22:13:33,406 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-13 22:13:33,412 - INFO - Processing 1 files
+2025-04-13 22:13:33,460 - INFO - Number of -999999 values before replacement: 0
+2025-04-13 22:13:33,461 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-13 22:13:33,461 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-13 22:13:33,461 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-13 22:13:33,461 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-13 22:13:33,468 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-13 22:13:33,470 - ERROR - Translation basis failed: unsupported operand type(s) for *: 'decimal.Decimal' and 'float'
+2025-04-13 22:14:11,958 - INFO - Received a request to /process_coordinates
+2025-04-13 22:14:11,958 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': 20}
+2025-04-13 22:14:11,958 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-13 22:14:11,964 - INFO - Processing 1 files
+2025-04-13 22:14:12,012 - INFO - Number of -999999 values before replacement: 0
+2025-04-13 22:14:12,013 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-13 22:14:12,013 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-13 22:14:12,013 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-13 22:14:12,013 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-13 22:14:12,021 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-13 22:14:12,026 - INFO - Request processed successfully
+2025-04-13 22:20:13,801 - INFO - Received a request to /process_coordinates
+2025-04-13 22:20:13,802 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': 20}
+2025-04-13 22:20:13,802 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-13 22:20:13,807 - INFO - Processing 1 files
+2025-04-13 22:20:13,855 - INFO - Number of -999999 values before replacement: 0
+2025-04-13 22:20:13,856 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-13 22:20:13,857 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-13 22:20:13,857 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-13 22:20:13,857 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-13 22:20:13,864 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-13 22:20:13,870 - INFO - Request processed successfully
+2025-04-13 22:20:16,809 - INFO - Received a request to /process_coordinates
+2025-04-13 22:20:16,809 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': -20}
+2025-04-13 22:20:16,809 - ERROR - heading must be a value greater than 0
+2025-04-13 22:20:21,988 - INFO - Received a request to /process_coordinates
+2025-04-13 22:20:21,989 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-13 22:20:21,989 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-13 22:20:21,989 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-13 22:20:21,991 - INFO - Processing 1 files
+2025-04-13 22:20:22,012 - INFO - Number of -999999 values before replacement: 0
+2025-04-13 22:20:22,012 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-13 22:20:22,013 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-13 22:20:22,013 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-13 22:20:22,013 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-13 22:20:22,019 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-13 22:20:22,022 - INFO - Request processed successfully
+2025-04-14 13:34:22,616 - INFO - Received a request to /process_coordinates
+2025-04-14 13:34:22,618 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 13:34:22,618 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 13:34:22,618 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-14 13:34:22,658 - INFO - Processing 1 files
+2025-04-14 13:34:22,698 - INFO - Number of -999999 values before replacement: 0
+2025-04-14 13:34:22,701 - INFO - Highest value in the DataFrame: 253.69789123535156
+2025-04-14 13:34:22,701 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-14 13:34:22,701 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-14 13:34:22,701 - INFO - Height of the elevation where the GS is located 232.18479073426275
+2025-04-14 13:34:22,711 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-14 13:34:22,718 - INFO - Request processed successfully
+2025-04-14 13:36:41,016 - INFO - Received a request to /process_coordinates
+2025-04-14 13:36:41,016 - INFO - Request parameters: {'upper_lat': 40.004843, 'lower_lat': 39.990086, 'upper_long': -82.909614, 'lower_long': -82.872003, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.999, 'gs_long': -82.89, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 13:36:41,016 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 13:36:41,016 - INFO - Looking up file based on coordinates: upper_lat=40.004843, upper_long=-82.909614, lower_lat=39.990086, lower_long=-82.872003
+2025-04-14 13:36:41,019 - INFO - Processing 2 files
+2025-04-14 13:37:23,013 - INFO - Received a request to /process_coordinates
+2025-04-14 13:37:23,013 - INFO - Request parameters: {'upper_lat': 40.004843, 'lower_lat': 39.990086, 'upper_long': -82.909614, 'lower_long': -82.872003, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.999, 'gs_long': -82.89, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 13:37:23,013 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 13:37:23,013 - INFO - Looking up file based on coordinates: upper_lat=40.004843, upper_long=-82.909614, lower_lat=39.990086, lower_long=-82.872003
+2025-04-14 13:37:23,019 - INFO - Processing 2 files
+2025-04-14 13:38:35,144 - INFO - Received a request to /process_coordinates
+2025-04-14 13:38:35,144 - INFO - Request parameters: {'upper_lat': 40.004843, 'lower_lat': 39.990086, 'upper_long': -82.909614, 'lower_long': -82.872003, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.999, 'gs_long': -82.89, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 13:38:35,144 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 13:38:35,144 - INFO - Looking up file based on coordinates: upper_lat=40.004843, upper_long=-82.909614, lower_lat=39.990086, lower_long=-82.872003
+2025-04-14 13:38:35,150 - INFO - Processing 2 files
+2025-04-14 13:38:48,297 - INFO - Received a request to /process_coordinates
+2025-04-14 13:38:48,297 - INFO - Request parameters: {'upper_lat': 40.004843, 'lower_lat': 39.990086, 'upper_long': -82.909614, 'lower_long': -82.872003, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.999, 'gs_long': -82.89, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 13:38:48,297 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 13:38:48,297 - INFO - Looking up file based on coordinates: upper_lat=40.004843, upper_long=-82.909614, lower_lat=39.990086, lower_long=-82.872003
+2025-04-14 13:38:48,302 - INFO - Processing 2 files
+2025-04-14 13:39:56,650 - INFO - Received a request to /process_coordinates
+2025-04-14 13:39:56,650 - INFO - Request parameters: {'upper_lat': 40.004843, 'lower_lat': 39.990086, 'upper_long': -82.909614, 'lower_long': -82.872003, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.999, 'gs_long': -82.89, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 13:39:56,650 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 13:39:56,650 - INFO - Looking up file based on coordinates: upper_lat=40.004843, upper_long=-82.909614, lower_lat=39.990086, lower_long=-82.872003
+2025-04-14 13:39:56,654 - INFO - Processing 2 files
+2025-04-14 13:45:22,118 - INFO - Received a request to /process_coordinates
+2025-04-14 13:45:22,118 - INFO - Request parameters: {'upper_lat': 40.004843, 'lower_lat': 39.990086, 'upper_long': -82.909614, 'lower_long': -82.872003, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.999, 'gs_long': -82.89, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 13:45:22,118 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 13:45:22,118 - INFO - Looking up file based on coordinates: upper_lat=40.004843, upper_long=-82.909614, lower_lat=39.990086, lower_long=-82.872003
+2025-04-14 13:45:22,123 - INFO - Processing 2 files
+2025-04-14 18:52:04,632 - INFO - Received a request to /process_coordinates
+2025-04-14 18:52:04,632 - INFO - Request parameters: {'upper_lat': 40.004843, 'lower_lat': 39.990086, 'upper_long': -82.909614, 'lower_long': -82.872003, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.999, 'gs_long': -82.89, 'gs_height': 0, 'offset': 200, 'heading': 380}
+2025-04-14 18:52:04,633 - INFO - heading was above 360 and had 360 subtracted to it
+2025-04-14 18:52:04,633 - INFO - Looking up file based on coordinates: upper_lat=40.004843, upper_long=-82.909614, lower_lat=39.990086, lower_long=-82.872003
+2025-04-14 18:52:04,666 - INFO - Processing 2 files
+2025-04-14 18:52:15,834 - INFO - Number of -999999 values before replacement: 40600
+2025-04-14 18:52:37,222 - INFO - Received a request to /process_coordinates
+2025-04-14 18:52:37,223 - INFO - Request parameters: {'upper_lat': 39.217984, 'lower_lat': 39.207046, 'upper_long': -82.237185, 'lower_long': -82.220715, 'num_x_slice': 20, 'num_y_slice': 10, 'gs_lat': 39.211834, 'gs_long': -82.229385, 'gs_height': 0, 'offset': 200, 'heading': 20}
+2025-04-14 18:52:37,223 - INFO - Looking up file based on coordinates: upper_lat=39.217984, upper_long=-82.237185, lower_lat=39.207046, lower_long=-82.220715
+2025-04-14 18:52:37,226 - INFO - Processing 1 files
+2025-04-14 18:52:37,263 - INFO - Number of -999999 values before replacement: 0
+2025-04-14 18:52:37,266 - INFO - Highest value in the DataFrame: 252.89004516601562
+2025-04-14 18:52:37,266 - INFO - Lowest value in the DataFrame: 223.03269958496094
+2025-04-14 18:52:37,266 - INFO - Data Frame Shape before Interpolation: (118, 178)
+2025-04-14 18:52:37,266 - INFO - Height of the elevation where the GS is located 232.19072341396168
+2025-04-14 18:52:37,276 - INFO - Data Frame Shape after Interpolation: (20, 10)
+2025-04-14 18:52:37,282 - INFO - Request processed successfully

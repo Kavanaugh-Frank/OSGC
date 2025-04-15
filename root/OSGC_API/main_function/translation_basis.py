@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 import numpy as np
+import math
 from main_function.ecef import latlon_to_ecef
 
 
@@ -8,7 +9,7 @@ from main_function.ecef import latlon_to_ecef
 # convert to ECEF first
 # then worry about the offset
 # the offset will subtracted to the X-Axis of the local tangent plane
-def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
+def translation_basis(data, offset, gs_lat, gs_lon, gs_alt, heading):
     """
     Transforms the given data from geodetic coordinates to a local tangent plane coordinate system
     based on a specified Glide Slope (GS) location and offset.
@@ -50,13 +51,21 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt):
     # Applying the dot product of the translation matrix with the data
     data = data.map(lambda x: np.dot(translation_matrix, x))
 
-    # Applying the offset to the X - Coordinate of each point
-    data = data.map(
-        lambda x: [
-            round(Decimal(x[0]) - Decimal(offset), 5),
-            round(Decimal(x[1]), 5),
-            round(Decimal(x[2]), 5),
-        ]
-    )
+    # rotating the data to match the heading of the airport, heading is clockwise from True North
+    theta_rad = Decimal(-math.radians(heading)) # negative so that it does counterclockwise rotation
+    cos_theta = Decimal(math.cos(theta_rad))
+    sin_theta = Decimal(math.sin(theta_rad))
+
+    def rotate_and_offset(point):
+        x, y, z = map(Decimal, point)
+        # Rotate the point
+        rotated_x = x * cos_theta - y * sin_theta
+        rotated_y = x * sin_theta + y * cos_theta
+        # Apply the offset to the X-coordinate
+        adjusted_x = rotated_x - Decimal(offset)
+        return [round(adjusted_x, 5), round(rotated_y, 5), round(z, 5)]
+
+    # Apply the transformation to the data
+    data = data.map(rotate_and_offset)
 
     return data

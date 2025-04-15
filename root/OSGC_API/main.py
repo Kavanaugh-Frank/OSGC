@@ -24,9 +24,6 @@ from main_function.translation_basis import translation_basis
 
 # Finds the height at the point that represents the GS in the DF before it is shrunken
 from main_function.gs_height import get_gs_height
-from osgeo import gdal
-
-gdal.DontUseExceptions()
 
 logging.basicConfig(
     level=logging.INFO,  # Set the logging level to INFO
@@ -60,6 +57,7 @@ def process_coordinates():
         gs_long = float(data.get("gs_long"))
         gs_height = float(data.get("gs_height"))  # meter
         offset = float(data.get("offset"))  # meter
+        heading = float(data.get("heading")) # heading of the airport in degrees (clockwise from true North)
 
         logging.info(f"Request parameters: {data}")
     except (TypeError, ValueError) as e:
@@ -89,6 +87,15 @@ def process_coordinates():
     if gs_height < 0:
         logging.error("gs_height must be a non-negative value")
         abort(400, "gs_height must be a non-negative value")
+
+    if heading < 0:
+        logging.error("heading must be a value greater than 0")
+        abort(400, "heading must be a value greater than 0")
+
+    # keep it between 0-360 without throwing an error
+    if heading > 360:
+        logging.info("heading was above 360 and had 360 subtracted to it")
+        heading = heading - 360
 
     upper_lat_ceil = math.ceil(abs(upper_lat))
     lower_lat_ceil = math.ceil(abs(lower_lat))
@@ -176,7 +183,7 @@ def process_coordinates():
         abort(404, f"Interpolation failed with error: {e}")
 
     try:
-        shrunk_json = translation_basis(shrunk_data, offset, gs_lat, gs_long, gs_height)
+        shrunk_json = translation_basis(shrunk_data, offset, gs_lat, gs_long, gs_height, heading)
     except Exception as e:
         logging.error(f"Translation basis failed: {e}")
         abort(404, f"Translation basis failed: {e}")
