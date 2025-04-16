@@ -148,7 +148,7 @@ def process_coordinates():
     count_invalid = (df == -999999.0).sum().sum()
     logging.info(f"Number of -999999 values before replacement: {count_invalid}")
     df.replace(-999999.0, None, inplace=True)
-    df.fillna("ffill", inplace=True)
+    df.fillna(method="ffill", inplace=True)
 
     df = df.astype(float)
     max_value = df.max().max()
