@@ -34,7 +34,8 @@ def create_temp_file():
 
     try:
         with rasterio.open(full_temp_file_name) as img:
-            print("Temporary file created successfully.")
+            pass
+            # print("Temporary file created successfully.")
     except Exception as e:
         abort(500, f"Failed to open temp file: {e}")
 

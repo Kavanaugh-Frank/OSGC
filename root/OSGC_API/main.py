@@ -1,6 +1,7 @@
 import math
 import os
 import logging
+import sys
 
 # Configuration for volume directory
 from config import volume_directory
@@ -40,6 +41,13 @@ logging.getLogger("osgeo").setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
+def resource_path(relative_path):
+    """Get absolute path to resource for PyInstaller."""
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.abspath(relative_path)
+
+os.environ['PROJ_LIB'] = resource_path('proj')
 
 @app.route("/process_coordinates", methods=["POST"])
 def process_coordinates():
@@ -147,8 +155,8 @@ def process_coordinates():
 
     count_invalid = (df == -999999.0).sum().sum()
     logging.info(f"Number of -999999 values before replacement: {count_invalid}")
-    df.replace(-999999.0, None, inplace=True)
-    df.fillna(method="ffill", inplace=True)
+
+    df.ffill(inplace=True)
 
     df = df.astype(float)
     max_value = df.max().max()
@@ -209,4 +217,4 @@ def process_coordinates():
     return jsonify(flattened_data)
 
 
-app.run(host="0.0.0.0", port=8080, debug=True)
+app.run(host="0.0.0.0", port=45895, debug=False)
