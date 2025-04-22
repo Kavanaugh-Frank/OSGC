@@ -2,6 +2,7 @@ import math
 import os
 import logging
 import sys
+from osgeo import gdal
 
 # Configuration for volume directory
 from config import volume_directory
@@ -38,6 +39,8 @@ logging.basicConfig(
 # Suppress logs from external libraries
 logging.getLogger("werkzeug").setLevel(logging.ERROR)
 logging.getLogger("osgeo").setLevel(logging.ERROR)
+
+gdal.DontUseExceptions()
 
 app = Flask(__name__)
 

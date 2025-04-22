@@ -2,11 +2,11 @@ import requests
 import os
 
 # List of TIFF files to download
-# tiff_list = ["n42w085"]
-tiff_list = ["n39w082", "n39w083", "n39w084", "n39w085",
-             "n40w081", "n40w082", "n40w083", "n40w084", "n40w085",
-             "n41w081", "n41w082", "n41w083", "n41w084", "n41w085",
-             "n42w081", "n42w082", "n42w083", "n42w084", "n42w085"]
+tiff_list = ["n40w083"]
+# tiff_list = ["n39w082", "n39w083", "n39w084", "n39w085",
+#              "n40w081", "n40w082", "n40w083", "n40w084", "n40w085",
+#              "n41w081", "n41w082", "n41w083", "n41w084", "n41w085",
+#              "n42w081", "n42w082", "n42w083", "n42w084", "n42w085"]
 
 # save_directory = "/data"
 # save_directory = "/Users/kavanaughfrank/Desktop/OSGC/root/OSGC_API/data"
