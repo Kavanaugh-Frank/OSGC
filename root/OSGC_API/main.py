@@ -203,13 +203,24 @@ def process_coordinates():
 
     flattened_data = shrunk_json.values.flatten().tolist()
 
-    with open("elevation.3D", "w", encoding="utf-8") as f:
-        f.write(f"  {num_y_slice}           {num_x_slice}\n")
-        for row in flattened_data:
-            f.write(f" {row[0]} {row[1]} {row[2]}\n")
+    # with open("elevation.3D", "w", encoding="utf-8") as f:
+    #     f.write(f"  {num_y_slice}           {num_x_slice}\n")
+    #     for row in flattened_data:
+    #         f.write(f" {row[0]} {row[1]} {row[2]}\n")
 
     logging.info("Request processed successfully")
     return jsonify(flattened_data)
 
-
+@app.route("/remove_tiff", methods=["POST"])
+def remove_tiff():
+    folder_path = resource_path('data')
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".tiff"):
+            file_path = os.path.join(folder_path, filename)
+            try:
+                os.remove(file_path)
+                logging.info(f"Deleted: {file_path}")
+            except Exception as e:
+                logging.error(f"Error deleting {file_path}: {e}")
+    return jsonify({"message": "TIFF files removed successfully"}), 200
 app.run(host="0.0.0.0", port=45895, debug=False)

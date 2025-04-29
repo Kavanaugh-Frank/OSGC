@@ -26,5 +26,5 @@ def get_gs_height(upper_lat, upper_long, lower_lat, lower_long, df, gs_lat, gs_l
         + bottom_right_value * lat_idx_decimal * long_idx_decimal
     )
 
-    print(f"Interpolated GS height: {interpolated_value}")
+    # print(f"Interpolated GS height: {interpolated_value}")
     return interpolated_value
