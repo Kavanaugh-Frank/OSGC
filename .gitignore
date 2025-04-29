@@ -1,4 +1,3 @@
 *.tiff
 root/OSGC_API/build/elevation_api/*
-
 root/OSGC_API/dist/*

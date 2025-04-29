@@ -13,6 +13,7 @@ from main_function.create_temp import create_temp_file
 
 # Looks up the file based on given coordinates
 from main_function.lookup_file import look_up_file
+from main_function.lookup_file import resource_path
 
 # Processes the files based on given parameters
 from main_function.process_files import process_files
@@ -40,12 +41,6 @@ logging.getLogger("werkzeug").setLevel(logging.ERROR)
 logging.getLogger("osgeo").setLevel(logging.ERROR)
 
 app = Flask(__name__)
-
-def resource_path(relative_path):
-    """Get absolute path to resource for PyInstaller."""
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-    return os.path.abspath(relative_path)
 
 os.environ['PROJ_LIB'] = resource_path('proj')
 
