@@ -42,7 +42,7 @@ logging.getLogger("osgeo").setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
-os.environ['PROJ_LIB'] = resource_path('proj')
+# os.environ['PROJ_LIB'] = resource_path('proj')
 
 @app.route("/process_coordinates", methods=["POST"])
 def process_coordinates():
