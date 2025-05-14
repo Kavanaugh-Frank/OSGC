@@ -39,7 +39,9 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=['runtime_hook.py'],
-    excludes=['PyQt5'],
+    excludes = [
+    'PyQt5'
+    ],
     noarchive=False,
     optimize=0,
 )

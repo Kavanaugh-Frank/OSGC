@@ -42,7 +42,6 @@ logging.getLogger("osgeo").setLevel(logging.ERROR)
 
 app = Flask(__name__)
 
-# os.environ['PROJ_LIB'] = resource_path('proj')
 
 @app.route("/process_coordinates", methods=["POST"])
 def process_coordinates():
@@ -223,4 +222,4 @@ def remove_tiff():
             except Exception as e:
                 logging.error(f"Error deleting {file_path}: {e}")
     return jsonify({"message": "TIFF files removed successfully"}), 200
-app.run(host="0.0.0.0", port=45895, debug=False)
+app.run(host="0.0.0.0", port=45895, debug=True)

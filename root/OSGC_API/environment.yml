@@ -10,7 +10,6 @@ dependencies:
   - flask
   - rasterio
   - gdal
-  - matplotlib
   - pip
   - pip:
       - georasters

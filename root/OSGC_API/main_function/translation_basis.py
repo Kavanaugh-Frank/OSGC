@@ -52,7 +52,8 @@ def translation_basis(data, offset, gs_lat, gs_lon, gs_alt, heading):
     data = data.map(lambda x: np.dot(translation_matrix, x))
 
     # rotating the data to match the heading of the airport, heading is clockwise from True North
-    theta_rad = Decimal(-math.radians(heading)) # negative so that it does counterclockwise rotation
+
+    theta_rad = Decimal(math.radians(-(-heading + 180))) # negative so that it does counterclockwise rotation
     cos_theta = Decimal(math.cos(theta_rad))
     sin_theta = Decimal(math.sin(theta_rad))
 
